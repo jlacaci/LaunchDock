@@ -1,5 +1,14 @@
 # 🚀 LaunchDock
 
+# 🚀 LaunchDock
+
+![Version](https://img.shields.io/github/v/release/jlacaci/LaunchDock)
+![Downloads](https://img.shields.io/github/downloads/jlacaci/LaunchDock/total)
+![License](https://img.shields.io/github/license/jlacaci/LaunchDock)
+![Platform](https://img.shields.io/badge/platform-Windows%2011-blue)
+![Language](https://img.shields.io/github/languages/top/jlacaci/LaunchDock)
+
+
 **LaunchDock** es un dock flotante para Windows 11 que permite organizar accesos directos en categorías personalizables.  
 Rápido, ligero, elegante y compatible con aplicaciones Win32, UWP y Microsoft Store.
 
