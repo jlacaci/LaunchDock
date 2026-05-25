@@ -14,7 +14,7 @@ https://github.com/jlacaci/LaunchDock/releases/latest
 
 ## 🖼️ Capturas de pantalla
 
-> <img width="1166" height="105" alt="image" src="https://github.com/user-attachments/assets/180211c9-00c6-4d1a-ae85-3d5106d9e8bb" />
+<img width="1166" height="105" alt="image" src="https://github.com/user-attachments/assets/180211c9-00c6-4d1a-ae85-3d5106d9e8bb" />
 <img width="1186" height="325" alt="image" src="https://github.com/user-attachments/assets/26657866-8696-477b-bcb7-3777ef8b584b" />
 <img width="1151" height="307" alt="image" src="https://github.com/user-attachments/assets/319f707c-3f70-4044-837e-b5c4f3ecea44" />
 <img width="505" height="600" alt="image" src="https://github.com/user-attachments/assets/2d19f338-8f3a-491f-926e-61bf315c674c" />
@@ -70,8 +70,6 @@ Consulta el historial completo en:
 
 - Algunos accesos directos UWP pueden tardar en extraer icono la primera vez
 - En configuraciones multi-monitor muy complejas, la posición inicial puede variar
-
-*(Puedes añadir más si quieres)*
 
 ---
 
