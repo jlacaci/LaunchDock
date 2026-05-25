@@ -1,0 +1,483 @@
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Threading;
+using LaunchDock.Helpers;
+using LaunchDock.Models;
+using Orientation = System.Windows.Controls.Orientation;
+
+namespace LaunchDock.Views;
+
+public partial class MainBarWindow : Window
+{
+    public bool IsEditMode { get; private set; } = false;
+
+    private readonly List<CategoryControl> _categoryControls = new();
+    private DispatcherTimer? _hideTimer;
+    private bool _isHidden = false;
+
+    public MainBarWindow()
+    {
+        InitializeComponent();
+        DataContext = this;
+        Loaded += OnLoaded;
+    }
+
+    private void OnLoaded(object sender, RoutedEventArgs e)
+    {
+        BuildCategories();
+        ApplyConfig();
+        SetupAutoHide();
+
+        // Permitir scroll horizontal con la rueda del ratón sobre las categorías
+        var scrollViewer = FindScrollViewer(CategoriesItemsControl);
+        if (scrollViewer != null)
+        {
+            scrollViewer.PreviewMouseWheel += (s, ev) =>
+            {
+                scrollViewer.ScrollToHorizontalOffset(
+                    scrollViewer.HorizontalOffset + (ev.Delta > 0 ? -40 : 40));
+                ev.Handled = true;
+            };
+        }
+    }
+
+    private static ScrollViewer? FindScrollViewer(DependencyObject element)
+    {
+        if (element is ScrollViewer sv) return sv;
+        var parent = VisualTreeHelper.GetParent(element);
+        return parent == null ? null : FindScrollViewer(parent);
+    }
+
+    // ─── LAYOUT & POSITIONING ─────────────────────────────────────────────────
+
+    private void ApplyConfig()
+    {
+        var cfg = ConfigManager.Config;
+
+        // Apply orientation (forzar vertical si es Left o Right)
+        var effectiveOrientation = (cfg.Position == "Left" || cfg.Position == "Right") 
+            ? "Vertical" 
+            : cfg.Orientation;
+        ApplyOrientation(effectiveOrientation);
+
+        // Apply customization (después de tener las categorías)
+        ApplyCustomization();
+
+        // Position the window
+        PositionWindow(cfg.Position, cfg.FloatX, cfg.FloatY);
+
+        // Apply corner radius based on position
+        MainBorder.CornerRadius = cfg.Position switch
+        {
+            "Top" => new CornerRadius(0, 0, 12, 12),
+            "Bottom" => new CornerRadius(12, 12, 0, 0),
+            "Left" => new CornerRadius(0, 12, 12, 0),
+            "Right" => new CornerRadius(12, 0, 0, 12),
+            _ => new CornerRadius(12)
+        };
+    }
+
+    private void ApplyCustomization()
+    {
+        var cfg = ConfigManager.Config;
+
+        // Aplicar color de fondo
+        try
+        {
+            var bgColor = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(cfg.BackgroundColor);
+            MainBorder.Background = new SolidColorBrush(bgColor);
+        }
+        catch { }
+
+        // Aplicar opacidad
+        this.Opacity = cfg.Opacity / 100.0;
+
+        // Reemplazar el AccentBrush global para que {DynamicResource AccentBrush} en los
+        // triggers de los estilos refleje el color de acento configurado por el usuario
+        try
+        {
+            var accentColor = (System.Windows.Media.Color)System.Windows.Media.ColorConverter
+                .ConvertFromString(cfg.AccentColor);
+            System.Windows.Application.Current.Resources["AccentBrush"] =
+                new SolidColorBrush(accentColor);
+        }
+        catch { }
+
+        // Aplicar estilos a todos los controles de categoría
+        foreach (var ctrl in _categoryControls)
+        {
+            ctrl.ApplyCustomization(cfg.AccentColor, cfg.TextColor, cfg.FontFamily, cfg.FontSize);
+        }
+    }
+
+    private void ApplyOrientation(string orientation)
+    {
+        if (orientation == "Vertical")
+        {
+            // Cambiar la orientación del ItemsControl interno
+            var itemsPanelTemplate = new ItemsPanelTemplate();
+            var factory = new FrameworkElementFactory(typeof(StackPanel));
+            factory.SetValue(StackPanel.OrientationProperty, Orientation.Vertical);
+            itemsPanelTemplate.VisualTree = factory;
+            CategoriesItemsControl.ItemsPanel = itemsPanelTemplate;
+
+            // Ajustar el tamaño de la ventana para modo vertical
+            SizeToContent = SizeToContent.WidthAndHeight;
+            Width = double.NaN; // Auto
+            Height = double.NaN; // Auto
+        }
+        else
+        {
+            // Orientación horizontal (por defecto)
+            var itemsPanelTemplate = new ItemsPanelTemplate();
+            var factory = new FrameworkElementFactory(typeof(StackPanel));
+            factory.SetValue(StackPanel.OrientationProperty, Orientation.Horizontal);
+            itemsPanelTemplate.VisualTree = factory;
+            CategoriesItemsControl.ItemsPanel = itemsPanelTemplate;
+
+            // Resetear Width para que PositionWindow lo calcule limpio
+            Width = double.NaN;
+            SizeToContent = SizeToContent.WidthAndHeight;
+        }
+
+        // Notificar a todos los controles de categoría sobre el cambio
+        foreach (var ctrl in _categoryControls)
+        {
+            ctrl.SetOrientation(orientation);
+        }
+
+        // Forzar actualización del layout
+        UpdateLayout();
+        InvalidateMeasure();
+        InvalidateArrange();
+    }
+
+    private void PositionWindow(string position, double floatX, double floatY)
+    {
+        var screen = System.Windows.SystemParameters.WorkArea;
+        var orientation = ConfigManager.Config.Orientation ?? "Horizontal";
+
+        switch (position)
+        {
+            case "Top":
+                Left = 0;
+                Top = 0;
+                if (orientation == "Horizontal")
+                {
+                    Width = screen.Width;
+                    SizeToContent = SizeToContent.Height;
+                }
+                else
+                {
+                    Width = double.NaN; // Auto
+                    SizeToContent = SizeToContent.WidthAndHeight;
+                }
+                break;
+            case "Bottom":
+                Left = 0;
+                if (orientation == "Horizontal")
+                {
+                    Width = screen.Width;
+                    SizeToContent = SizeToContent.Height;
+                    Dispatcher.InvokeAsync(() =>
+                    {
+                        Top = screen.Bottom - ActualHeight;
+                    }, DispatcherPriority.Loaded);
+                }
+                else
+                {
+                    Width = double.NaN; // Auto
+                    SizeToContent = SizeToContent.WidthAndHeight;
+                    Dispatcher.InvokeAsync(() =>
+                    {
+                        Top = screen.Bottom - ActualHeight;
+                    }, DispatcherPriority.Loaded);
+                }
+                break;
+            case "Left":
+                // Siempre vertical para izquierda
+                Left = 0;
+                Top = 0;
+                Height = screen.Height;
+                SizeToContent = SizeToContent.Width;
+                break;
+            case "Right":
+                // Siempre vertical para derecha
+                Top = 0;
+                Height = screen.Height;
+                SizeToContent = SizeToContent.Width;
+                Dispatcher.InvokeAsync(() =>
+                {
+                    Left = screen.Right - ActualWidth;
+                }, DispatcherPriority.Loaded);
+                break;
+            case "Floating":
+            default:
+                Left = floatX;
+                Top = floatY;
+                SizeToContent = SizeToContent.WidthAndHeight;
+                break;
+        }
+    }
+
+    // ─── CATEGORY BUILDING ────────────────────────────────────────────────────
+
+    private void BuildCategories()
+    {
+        CategoriesItemsControl.Items.Clear();
+        _categoryControls.Clear();
+
+        var cfg = ConfigManager.Config;
+
+        foreach (var cat in cfg.Categories)
+        {
+            var ctrl = new CategoryControl(cat, this);
+            ctrl.ApplyCustomization(cfg.AccentColor, cfg.TextColor, cfg.FontFamily, cfg.FontSize);
+            _categoryControls.Add(ctrl);
+            CategoriesItemsControl.Items.Add(ctrl);
+        }
+    }
+
+    // ─── EDIT MODE ────────────────────────────────────────────────────────────
+
+    public void ToggleEditMode()
+    {
+        IsEditMode = !IsEditMode;
+        OnPropertyChanged(nameof(IsEditMode));
+
+        AddCategoryBtn.Visibility = IsEditMode ? Visibility.Visible : Visibility.Collapsed;
+        ExitEditBtn.Visibility = IsEditMode ? Visibility.Visible : Visibility.Collapsed;
+
+        foreach (var ctrl in _categoryControls)
+            ctrl.SetEditMode(IsEditMode);
+
+        if (IsEditMode)
+        {
+            ConstrainToCurrentMonitor();
+        }
+        else
+        {
+            // Quitar restricción de tamaño y volver al layout normal
+            MaxWidth = double.PositiveInfinity;
+            MaxHeight = double.PositiveInfinity;
+            ApplyConfig();
+            ConfigManager.Save();
+        }
+    }
+
+    /// <summary>
+    /// Limita la ventana al área de trabajo del monitor en que se encuentra,
+    /// para que en modo edición nunca se salga de pantalla.
+    /// </summary>
+    private void ConstrainToCurrentMonitor()
+    {
+        // Obtener el área de trabajo del monitor donde está la ventana
+        var workArea = GetCurrentMonitorWorkArea();
+
+        var cfg = ConfigManager.Config;
+        var position = cfg.Position ?? "Top";
+
+        if (position == "Top" || position == "Bottom")
+        {
+            // En Top/Bottom la ventana ya ocupa el ancho completo del monitor.
+            // Solo asegurar que MaxWidth esté limitado; el ScrollViewer absorbe el exceso.
+            MaxWidth = workArea.Width;
+        }
+        else if (position == "Left" || position == "Right")
+        {
+            MaxHeight = workArea.Height;
+            Top = workArea.Top;
+            Height = workArea.Height;
+            SizeToContent = SizeToContent.Width;
+        }
+        else // Floating
+        {
+            // Limitar al monitor actual y reposicionar si se sale por la derecha/abajo
+            MaxWidth = workArea.Width;
+            MaxHeight = workArea.Height;
+            SizeToContent = SizeToContent.WidthAndHeight;
+
+            Dispatcher.InvokeAsync(() =>
+            {
+                if (Left + ActualWidth > workArea.Right)
+                    Left = workArea.Right - ActualWidth;
+                if (Left < workArea.Left)
+                    Left = workArea.Left;
+                if (Top + ActualHeight > workArea.Bottom)
+                    Top = workArea.Bottom - ActualHeight;
+                if (Top < workArea.Top)
+                    Top = workArea.Top;
+            }, DispatcherPriority.Loaded);
+        }
+    }
+
+    /// <summary>
+    /// Devuelve el WorkArea del monitor en el que está actualmente la ventana.
+    /// Usa WinForms Screen para soporte multi-monitor.
+    /// </summary>
+    private System.Windows.Rect GetCurrentMonitorWorkArea()
+    {
+        // Convertir posición WPF (DIPs) a píxeles para WinForms
+        var source = PresentationSource.FromVisual(this);
+        double dpiX = 1.0, dpiY = 1.0;
+        if (source?.CompositionTarget != null)
+        {
+            dpiX = source.CompositionTarget.TransformToDevice.M11;
+            dpiY = source.CompositionTarget.TransformToDevice.M22;
+        }
+
+        int cx = (int)((Left + ActualWidth / 2) * dpiX);
+        int cy = (int)((Top + ActualHeight / 2) * dpiY);
+
+        var screen = System.Windows.Forms.Screen.FromPoint(new System.Drawing.Point(cx, cy));
+        var wa = screen.WorkingArea;
+
+        // Devolver en DIPs
+        return new System.Windows.Rect(
+            wa.Left   / dpiX,
+            wa.Top    / dpiY,
+            wa.Width  / dpiX,
+            wa.Height / dpiY);
+    }
+
+    private void ExitEditMode_Click(object sender, RoutedEventArgs e)
+    {
+        if (IsEditMode)
+        {
+            ToggleEditMode();
+        }
+    }
+
+    // ─── AUTO HIDE ────────────────────────────────────────────────────────────
+
+    private void SetupAutoHide()
+    {
+        if (!ConfigManager.Config.AutoHide) return;
+
+        MouseEnter += (s, e) => ShowBar();
+        MouseLeave += (s, e) => StartHideTimer();
+
+        _hideTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+        _hideTimer.Tick += (s, e) => { _hideTimer.Stop(); HideBar(); };
+
+        Dispatcher.InvokeAsync(HideBar, DispatcherPriority.Loaded);
+    }
+
+    private void ShowBar()
+    {
+        _hideTimer?.Stop();
+        if (!_isHidden) return;
+        _isHidden = false;
+
+        var anim = new DoubleAnimation(0, TimeSpan.FromMilliseconds(180));
+        var tt = (TranslateTransform)RenderTransform;
+        tt.BeginAnimation(TranslateTransform.YProperty, anim);
+        Opacity = 1;
+    }
+
+    private void HideBar()
+    {
+        if (_isHidden) return;
+        _isHidden = true;
+
+        var cfg = ConfigManager.Config;
+        double offset = cfg.Position == "Top" ? -(ActualHeight - 4) : (ActualHeight - 4);
+
+        if (RenderTransform is not TranslateTransform)
+            RenderTransform = new TranslateTransform();
+
+        var anim = new DoubleAnimation(offset, TimeSpan.FromMilliseconds(250));
+        ((TranslateTransform)RenderTransform).BeginAnimation(TranslateTransform.YProperty, anim);
+    }
+
+    private void StartHideTimer()
+    {
+        _hideTimer?.Stop();
+        _hideTimer?.Start();
+    }
+
+    // ─── DRAG ─────────────────────────────────────────────────────────────────
+
+    private void DragHandle_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        DragMove();
+        ConfigManager.Config.Position = "Floating";
+        ConfigManager.Config.FloatX = Left;
+        ConfigManager.Config.FloatY = Top;
+    }
+
+    // ─── EVENT HANDLERS ───────────────────────────────────────────────────────
+
+    private void AddCategory_Click(object sender, RoutedEventArgs e)
+    {
+        var cfg = ConfigManager.Config;
+        var cat = new CategoryModel { Name = "NUEVA" };
+        cfg.Categories.Add(cat);
+        var ctrl = new CategoryControl(cat, this);
+        ctrl.ApplyCustomization(cfg.AccentColor, cfg.TextColor, cfg.FontFamily, cfg.FontSize);
+        _categoryControls.Add(ctrl);
+        CategoriesItemsControl.Items.Add(ctrl);
+        ctrl.SetEditMode(true);
+        ctrl.StartRenaming();
+    }
+
+    private void EditMode_Click(object sender, RoutedEventArgs e)
+        => ToggleEditMode();
+
+    private void Settings_Click(object sender, RoutedEventArgs e)
+        => OpenSettings();
+
+    public void OpenSettings()
+    {
+        var win = new SettingsWindow();
+        win.Owner = this;
+        if (win.ShowDialog() == true)
+        {
+            ApplyConfig();
+            SetupAutoHide();
+        }
+    }
+
+    public void RemoveCategory(CategoryControl ctrl, CategoryModel model)
+    {
+        _categoryControls.Remove(ctrl);
+        CategoriesItemsControl.Items.Remove(ctrl);
+        ConfigManager.Config.Categories.Remove(model);
+    }
+
+    public void MoveCategoryUp(CategoryControl ctrl)
+    {
+        int idx = _categoryControls.IndexOf(ctrl);
+        if (idx <= 0) return;
+        _categoryControls.RemoveAt(idx);
+        _categoryControls.Insert(idx - 1, ctrl);
+        CategoriesItemsControl.Items.Remove(ctrl);
+        CategoriesItemsControl.Items.Insert(idx - 1, ctrl);
+        ConfigManager.Config.Categories.RemoveAt(idx);
+        ConfigManager.Config.Categories.Insert(idx - 1, ctrl.Model);
+    }
+
+    public void MoveCategoryDown(CategoryControl ctrl)
+    {
+        int idx = _categoryControls.IndexOf(ctrl);
+        if (idx < 0 || idx >= _categoryControls.Count - 1) return;
+        _categoryControls.RemoveAt(idx);
+        _categoryControls.Insert(idx + 1, ctrl);
+        CategoriesItemsControl.Items.Remove(ctrl);
+        CategoriesItemsControl.Items.Insert(idx + 1, ctrl);
+        ConfigManager.Config.Categories.RemoveAt(idx);
+        ConfigManager.Config.Categories.Insert(idx + 1, ctrl.Model);
+    }
+
+    // INotifyPropertyChanged stub
+    public event System.ComponentModel.PropertyChangedEventHandler? PropertyChanged;
+    protected void OnPropertyChanged(string name)
+        => PropertyChanged?.Invoke(this, new System.ComponentModel.PropertyChangedEventArgs(name));
+}

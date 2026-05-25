@@ -1,0 +1,164 @@
+<Window x:Class="LaunchDock.Views.MainBarWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="LaunchDock"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Topmost="False"
+        ShowInTaskbar="False"
+        ResizeMode="NoResize"
+        SizeToContent="WidthAndHeight"
+        Left="0" Top="0">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </Window.Resources>
+
+    <Grid>
+        <!-- Main bar panel -->
+        <Border x:Name="MainBorder"
+                Background="#CC1A1A2E"
+                CornerRadius="0">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="20" ShadowDepth="4" Opacity="0.6"/>
+            </Border.Effect>
+
+            <Grid>
+                <!-- Horizontal bar layout (Top/Bottom) -->
+                <Grid x:Name="HorizontalLayout" Visibility="Visible">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <!-- Edit mode indicator -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- Main bar height - Auto para permitir modo vertical -->
+                    </Grid.RowDefinitions>
+
+                    <!-- Edit Mode Banner -->
+                    <Border Grid.Row="0" Background="#E94560" Padding="8,3"
+                            Visibility="{Binding IsEditMode, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BoolToVis}}">
+                        <Grid>
+                            <TextBlock Text="✏ MODO EDICIÓN  —  Arrastra accesos directos aquí · Haz clic en + para añadir categorías"
+                                       Foreground="White" FontSize="11" FontWeight="SemiBold"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Segoe UI"/>
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Button Content="✓ GUARDAR" 
+                                        Click="ExitEditMode_Click"
+                                        Background="#16C79A" 
+                                        Foreground="White"
+                                        BorderThickness="0"
+                                        Padding="20,6"
+                                        FontFamily="Segoe UI"
+                                        FontSize="11"
+                                        FontWeight="Bold"
+                                        Cursor="Hand"
+                                        VerticalAlignment="Center"
+                                        Height="26"
+                                        Margin="0,0,4,0">
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border Background="{TemplateBinding Background}"
+                                                                CornerRadius="5"
+                                                                Padding="{TemplateBinding Padding}">
+                                                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                        </Border>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="Background" Value="#13A87E"/>
+                                                            </Trigger>
+                                                            <Trigger Property="IsPressed" Value="True">
+                                                                <Setter Property="Background" Value="#0F8A6A"/>
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- Categories row -->
+                    <Grid x:Name="CategoriesPanel" Grid.Row="1" MinHeight="42">
+                        <Grid.ColumnDefinitions>
+                            <!-- Drag handle -->
+                            <ColumnDefinition Width="36"/>
+                            <!-- Categorías con scroll -->
+                            <ColumnDefinition Width="*"/>
+                            <!-- Botones fijos: + Categoría, Guardar, ⚙ -->
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Drag handle / Logo -->
+                        <Border Grid.Column="0" Background="Transparent" Cursor="SizeAll"
+                                ToolTip="Arrastrar barra"
+                                MouseLeftButtonDown="DragHandle_MouseLeftButtonDown">
+                            <TextBlock Text="⠿" Foreground="#555577" FontSize="18"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+
+                        <!-- Scroll horizontal para las categorías -->
+                        <ScrollViewer Grid.Column="1"
+                                      HorizontalScrollBarVisibility="Hidden"
+                                      VerticalScrollBarVisibility="Disabled"
+                                      VerticalAlignment="Stretch">
+                            <!-- Dynamic categories (built in code-behind) -->
+                            <ItemsControl x:Name="CategoriesItemsControl">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                        </ScrollViewer>
+
+                        <!-- Botones fijos: siempre visibles, no se desplazan -->
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+
+                            <!-- Add Category button (edit mode) -->
+                            <Button x:Name="AddCategoryBtn"
+                                    Content="＋ Categoría"
+                                    Style="{StaticResource CategoryButtonStyle}"
+                                    Visibility="Collapsed"
+                                    Click="AddCategory_Click"
+                                    Foreground="#E94560"
+                                    Margin="4,0"/>
+
+                            <!-- Exit Edit Mode button (edit mode) -->
+                            <Button x:Name="ExitEditBtn"
+                                    Content="✓ GUARDAR"
+                                    Style="{StaticResource CategoryButtonStyle}"
+                                    Visibility="Collapsed"
+                                    Click="ExitEditMode_Click"
+                                    Background="#16C79A"
+                                    Foreground="White"
+                                    FontWeight="Bold"
+                                    Margin="4,0"
+                                    ToolTip="Guardar cambios y salir del modo edición"/>
+
+                            <!-- Edit mode button -->
+                            <Button x:Name="EditModeBtn"
+                                    Style="{StaticResource IconButtonStyle}"
+                                    Content="✏" ToolTip="Modo edición"
+                                    Click="EditMode_Click"
+                                    Margin="4,0" Width="36" FontSize="16"/>
+
+                            <!-- Settings button -->
+                            <Button Style="{StaticResource IconButtonStyle}"
+                                    Content="⚙" ToolTip="Configuración"
+                                    Click="Settings_Click"
+                                    Margin="4,0" Width="36" FontSize="16"/>
+
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
