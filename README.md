@@ -1,3 +1,4 @@
+<img width="500" height="500" alt="qrcode" src="https://github.com/user-attachments/assets/44186f5c-244d-4556-949e-ea848bc33bd2" />
 # 🚀 LaunchDock
 
 **LaunchDock** es un dock flotante para Windows 11 que permite organizar accesos directos en categorías personalizables.  
@@ -77,7 +78,8 @@ Consulta el historial completo en:
 
 Si LaunchDock te resulta útil, puedes apoyar su desarrollo:
 
-👉 **PayPal:** *tu enlace aquí*  
+👉 **PayPal:** *https://www.paypal.me/jlacaci*  
+<img width="500" height="500" alt="qrcode" src="https://github.com/user-attachments/assets/890cc34c-ae25-452e-9b26-e4274f3d9a74" />
 
 
 ---
