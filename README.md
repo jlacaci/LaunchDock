@@ -78,7 +78,7 @@ Consulta el historial completo en:
 Si LaunchDock te resulta útil, puedes apoyar su desarrollo:
 
 👉 **PayPal:** *https://www.paypal.me/jlacaci*  
-<img width="50" height="50" alt="qrcode" src="https://github.com/user-attachments/assets/890cc34c-ae25-452e-9b26-e4274f3d9a74" />
+<img width="150" height="150" alt="qrcode" src="https://github.com/user-attachments/assets/890cc34c-ae25-452e-9b26-e4274f3d9a74" />
 
 
 ---
