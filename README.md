@@ -1,7 +1,5 @@
 # 🚀 LaunchDock
 
-# 🚀 LaunchDock
-
 ![Version](https://img.shields.io/github/v/release/jlacaci/LaunchDock)
 ![Downloads](https://img.shields.io/github/downloads/jlacaci/LaunchDock/total)
 ![License](https://img.shields.io/github/license/jlacaci/LaunchDock)
