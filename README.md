@@ -10,6 +10,23 @@
 **LaunchDock** es un dock flotante para Windows 11 que permite organizar accesos directos en categorías personalizables.  
 Rápido, ligero, elegante y compatible con aplicaciones Win32, UWP y Microsoft Store.
 
+Próximos Cambios y Mejoras a implementar:
+
+1. Posibilidad de guardar la configuracion en archivo json (Backup/Restore).
+2. Posibilidad de varios Docks a la vez (Multi-instancia).
+3. Posibilidad de minimizar/ocultar la barra en un pequeño icono minimalista
+4. Añadir panel estrecho al dock con accesos del sistema como:
+- Panel de control  
+- Ejecutar  
+- Buscar  
+- Configuración  
+- Administrador de tareas  
+- Servicios  
+- CMD / PowerShell  
+- Apagar / Reiniciar / Suspender
+5. Multilenguaje
+6. Temas visuales
+
 ---
 
 ## 📥 Descargar
