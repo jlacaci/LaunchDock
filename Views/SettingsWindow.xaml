@@ -232,6 +232,17 @@
                     <TextBlock Text="🎨 PERSONALIZACIÓN" FontSize="12" FontWeight="Bold"
                                Foreground="#E94560" Margin="0,0,0,16"/>
 
+                    <!-- Temas -->
+                    <TextBlock Text="TEMA" FontSize="10" FontWeight="Bold"
+                               Foreground="#9A9AB0" Margin="0,0,0,8"/>
+                    <WrapPanel Margin="0,0,0,16" x:Name="ThemePanel">
+                        <Button x:Name="ThemeOscuro"   Content="🌑 Oscuro"           Tag="Oscuro"             Margin="0,0,6,6" Padding="10,6" Cursor="Hand" Click="ThemePreset_Click" FontFamily="Segoe UI" FontSize="12" BorderThickness="1" BorderBrush="#444466" Background="#2A2A4A" Foreground="#EAEAEA"/>
+                        <Button x:Name="ThemeDracula"  Content="🧛 Drácula"          Tag="Dracula"            Margin="0,0,6,6" Padding="10,6" Cursor="Hand" Click="ThemePreset_Click" FontFamily="Segoe UI" FontSize="12" BorderThickness="1" BorderBrush="#444466" Background="#2A2A4A" Foreground="#EAEAEA"/>
+                        <Button x:Name="ThemeNord"     Content="🌊 Nord"             Tag="Nord"               Margin="0,0,6,6" Padding="10,6" Cursor="Hand" Click="ThemePreset_Click" FontFamily="Segoe UI" FontSize="12" BorderThickness="1" BorderBrush="#444466" Background="#2A2A4A" Foreground="#EAEAEA"/>
+                        <Button x:Name="ThemeClaro"    Content="☀️ Claro"            Tag="Claro"              Margin="0,0,6,6" Padding="10,6" Cursor="Hand" Click="ThemePreset_Click" FontFamily="Segoe UI" FontSize="12" BorderThickness="1" BorderBrush="#444466" Background="#2A2A4A" Foreground="#EAEAEA"/>
+                        <Button x:Name="ThemeNeuDark"  Content="🌑 Neumórfico Oscuro" Tag="NeumorficoOscuro"  Margin="0,0,6,6" Padding="10,6" Cursor="Hand" Click="ThemePreset_Click" FontFamily="Segoe UI" FontSize="12" BorderThickness="1" BorderBrush="#444466" Background="#2A2A4A" Foreground="#EAEAEA"/>
+                    </WrapPanel>
+
                     <!-- Colores -->
                     <TextBlock Text="COLORES" FontSize="10" FontWeight="Bold"
                                Foreground="#9A9AB0" Margin="0,0,0,8"/>
@@ -295,6 +306,22 @@
                                        Foreground="#EAEAEA" FontSize="12" 
                                        Margin="12,0,0,0" VerticalAlignment="Center" MinWidth="30"/>
                             <TextBlock Text="px" Foreground="#9A9AB0" FontSize="11" 
+                                       Margin="2,0,0,0" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Radio de esquinas -->
+                    <StackPanel Margin="0,0,0,16">
+                        <TextBlock Text="Radio de esquinas" Foreground="#EAEAEA" FontSize="11" Margin="0,0,0,4"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Slider x:Name="CornerRadiusSlider"
+                                    Minimum="0" Maximum="20" Value="12"
+                                    Width="200" VerticalAlignment="Center"
+                                    TickFrequency="1" IsSnapToTickEnabled="True"/>
+                            <TextBlock Text="{Binding Value, ElementName=CornerRadiusSlider}"
+                                       Foreground="#EAEAEA" FontSize="12"
+                                       Margin="12,0,0,0" VerticalAlignment="Center" MinWidth="30"/>
+                            <TextBlock Text="px" Foreground="#9A9AB0" FontSize="11"
                                        Margin="2,0,0,0" VerticalAlignment="Center"/>
                         </StackPanel>
                     </StackPanel>

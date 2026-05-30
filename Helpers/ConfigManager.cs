@@ -52,6 +52,8 @@ public static class ConfigManager
             AutoHide = false,
             Theme = "Dark",
             IconSize = 32,
+            ThemeName = "Oscuro",
+            CornerRadiusValue = 12,
             Categories = new List<CategoryModel>
             {
                 new() { Name = "OFIMÁTICA",  Shortcuts = new() },

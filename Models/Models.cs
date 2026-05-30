@@ -19,6 +19,8 @@ public class AppConfig
     public string BackgroundColor { get; set; } = "#CC1A1A2E";
     public string AccentColor { get; set; } = "#E94560";
     public string TextColor { get; set; } = "#EAEAEA";
+    public string ThemeName { get; set; } = "Oscuro";
+    public int CornerRadiusValue { get; set; } = 12;
     public string FontFamily { get; set; } = "Segoe UI";
     public int FontSize { get; set; } = 13;
     public int Opacity { get; set; } = 95;  // 0-100%

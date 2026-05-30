@@ -74,13 +74,14 @@ public partial class MainBarWindow : Window
         PositionWindow(cfg.Position, cfg.FloatX, cfg.FloatY);
 
         // Apply corner radius based on position
+        var cr = cfg.CornerRadiusValue;
         MainBorder.CornerRadius = cfg.Position switch
         {
-            "Top" => new CornerRadius(0, 0, 12, 12),
-            "Bottom" => new CornerRadius(12, 12, 0, 0),
-            "Left" => new CornerRadius(0, 12, 12, 0),
-            "Right" => new CornerRadius(12, 0, 0, 12),
-            _ => new CornerRadius(12)
+            "Top"    => new CornerRadius(0, 0, cr, cr),
+            "Bottom" => new CornerRadius(cr, cr, 0, 0),
+            "Left"   => new CornerRadius(0, cr, cr, 0),
+            "Right"  => new CornerRadius(cr, 0, 0, cr),
+            _        => new CornerRadius(cr)
         };
     }
 

@@ -5,7 +5,17 @@ Formato: `[versión] — fecha`
 
 ---
 
-## [1.2.1] — 2025
+## [1.3.0] — 2025
+
+### ? Mejoras
+
+- **5 temas de color predefinidos**: nueva sección TEMA en Configuración con botones de preset. Los temas disponibles son `Oscuro` (el clásico), `Drácula` (púrpura), `Nord` (azules fríos), `Claro` (fondo blanco) y `Neumórfico Oscuro` (violeta suave). Al seleccionar un tema se rellenan automáticamente los 3 campos de color; el usuario puede seguir ajustándolos manualmente.
+- **Radio de esquinas configurable**: nuevo slider en Configuración (0–20 px). El radio se aplica inteligentemente según la posición de la barra: las esquinas pegadas al borde del monitor siempre quedan en 0 y solo se redondean las esquinas libres.
+- **Indicador de tema activo**: el botón del tema seleccionado se resalta con el color de acento y negrita.
+
+---
+
+
 
 ### ?? Bugs arreglados
 
