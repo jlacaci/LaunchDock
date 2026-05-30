@@ -25,7 +25,7 @@ Próximos Cambios y Mejoras a implementar:
 - CMD / PowerShell  
 - Apagar / Reiniciar / Suspender
 5. Multilenguaje
-6. Temas visuales
+6. ~~Temas visuales~~ ✅ Implementado en v1.3.0
 
 ---
 
@@ -57,8 +57,12 @@ https://github.com/jlacaci/LaunchDock/releases/latest
 - Modo edición con botones compactos
 - Scroll horizontal cuando hay muchas categorías
 - Caché de iconos para arranques más rápidos
+- **5 temas de color predefinidos:** Oscuro, Drácula, Nord, Claro, Neumórfico Oscuro
+- **Radio de esquinas configurable** (slider 0–20 px)
+- Color de acento, fondo y texto totalmente personalizables
 - Configuración persistente en `%AppData%`
 - Compatible con múltiples monitores y DPI-aware
+- Categorías por defecto en primera instalación
 
 ---
 
@@ -86,13 +90,12 @@ https://github.com/jlacaci/LaunchDock/releases/latest
 Consulta el historial completo en:  
 👉 [`CHANGELOG.md`](CHANGELOG.md)
 
-Última versión publicada: **1.2.1**
+Última versión publicada: **1.3.0**
 
 ---
 
 ## 🧩 Problemas conocidos
 
-- Algunos accesos directos UWP pueden tardar en extraer icono la primera vez
 - En configuraciones multi-monitor muy complejas, la posición inicial puede variar
 
 ---
