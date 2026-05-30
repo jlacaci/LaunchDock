@@ -12,7 +12,7 @@ Rápido, ligero, elegante y compatible con aplicaciones Win32, UWP y Microsoft S
 
 Próximos Cambios y Mejoras a implementar:
 
-1. Posibilidad de guardar la configuracion en archivo json (Backup/Restore).
+1. ~~Posibilidad de guardar la configuracion en archivo json (Backup/Restore).~~ ✅ Implementado en v1.4.0
 2. Posibilidad de varios Docks a la vez (Multi-instancia).
 3. Posibilidad de minimizar/ocultar la barra en un pequeño icono minimalista
 4. Añadir panel estrecho al dock con accesos del sistema como:
@@ -57,6 +57,7 @@ https://github.com/jlacaci/LaunchDock/releases/latest
 - Modo edición con botones compactos
 - Scroll horizontal cuando hay muchas categorías
 - Caché de iconos para arranques más rápidos
+- **Backup / Restore de configuración**: exporta e importa toda tu configuración en un archivo `.json`
 - **5 temas de color predefinidos:** Oscuro, Drácula, Nord, Claro, Neumórfico Oscuro
 - **Radio de esquinas configurable** (slider 0–20 px)
 - Color de acento, fondo y texto totalmente personalizables
@@ -90,7 +91,7 @@ https://github.com/jlacaci/LaunchDock/releases/latest
 Consulta el historial completo en:  
 👉 [`CHANGELOG.md`](CHANGELOG.md)
 
-Última versión publicada: **1.3.0**
+Última versión publicada: **1.4.0**
 
 ---
 

@@ -350,6 +350,34 @@
 
             <!-- Buttons -->
             <StackPanel Grid.Row="2" Margin="0,16,0,0">
+                <!-- Backup / Restore -->
+                <Border Background="#1A1A2E" BorderBrush="#333355" BorderThickness="1"
+                        CornerRadius="6" Padding="12,10" Margin="0,0,0,12">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                            <TextBlock Text="💾 Copia de seguridad" Foreground="#EAEAEA"
+                                       FontFamily="Segoe UI Semibold" FontSize="12" FontWeight="SemiBold"/>
+                            <TextBlock Text="Exporta o importa tu configuración completa"
+                                       Foreground="#9A9AB0" FontFamily="Segoe UI" FontSize="11"/>
+                        </StackPanel>
+                        <Button Grid.Column="1" Content="📤 Exportar" Click="ExportConfig_Click"
+                                Background="#2A2A4A" Foreground="#9A9AB0"
+                                BorderThickness="1" BorderBrush="#444466"
+                                Padding="12,6" FontFamily="Segoe UI" FontSize="12"
+                                Cursor="Hand" Margin="12,0,6,0" VerticalAlignment="Center"/>
+                        <Button Grid.Column="2" Content="📥 Importar" Click="ImportConfig_Click"
+                                Background="#2A2A4A" Foreground="#9A9AB0"
+                                BorderThickness="1" BorderBrush="#444466"
+                                Padding="12,6" FontFamily="Segoe UI" FontSize="12"
+                                Cursor="Hand" VerticalAlignment="Center"/>
+                    </Grid>
+                </Border>
+
                 <!-- Botón limpiar caché de iconos -->
                 <Border Background="#1A1A2E" BorderBrush="#333355" BorderThickness="1"
                         CornerRadius="6" Padding="12,10" Margin="0,0,0,12">

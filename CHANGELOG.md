@@ -5,7 +5,17 @@ Formato: `[versión] — fecha`
 
 ---
 
-## [1.3.0] — 2025
+## [1.4.0] — 2025
+
+### ? Mejoras
+
+- **Backup / Restore de configuración**: nueva sección en Configuración con dos botones:
+  - `?? Exportar` — guarda el `config.json` completo (categorías, accesos directos, colores, fuente, posición…) en la ruta que elija el usuario.
+  - `?? Importar` — carga un `config.json` previamente exportado y lo aplica al reiniciar LaunchDock. Incluye confirmación antes de sobreescribir.
+
+---
+
+
 
 ### ? Mejoras
 
