@@ -1,108 +1,124 @@
-# LaunchDock 🚀
+# 🚀 LaunchDock
 
-Barra de accesos directos categorizados para Windows — estilo barra de menús flotante.
+![Version](https://img.shields.io/github/v/release/jlacaci/LaunchDock)
+![Downloads](https://img.shields.io/github/downloads/jlacaci/LaunchDock/total)
+![License](https://img.shields.io/github/license/jlacaci/LaunchDock)
+![Platform](https://img.shields.io/badge/platform-Windows%2011-blue)
+![Language](https://img.shields.io/github/languages/top/jlacaci/LaunchDock)
 
----
 
-## ✅ Requisitos
+**LaunchDock** es un dock flotante para Windows 11 que permite organizar accesos directos en categorías personalizables.  
+Rápido, ligero, elegante y compatible con aplicaciones Win32, UWP y Microsoft Store.
 
-- Windows 10 / 11
-- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) (para compilar)
-- Visual Studio 2022+ **o** compilación por línea de comandos
+Próximos Cambios y Mejoras a implementar:
 
----
-
-## 🔨 Compilar y ejecutar
-
-### Opción A — Visual Studio 2022
-1. Abre `LaunchDock.csproj` en Visual Studio
-2. Selecciona configuración **Release**
-3. Pulsa `Ctrl+Shift+B` para compilar
-4. El ejecutable quedará en `bin\Release\net8.0-windows\LaunchDock.exe`
-
-### Opción B — Línea de comandos (PowerShell / CMD)
-```powershell
-cd LaunchDock
-dotnet restore
-dotnet build -c Release
-dotnet run
-```
-
-### Opción C — Publicar como .exe único portátil
-```powershell
-dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true
-```
-El resultado estará en `bin\Release\net8.0-windows\win-x64\publish\LaunchDock.exe`
+1. Posibilidad de guardar la configuracion en archivo json (Backup/Restore).
+2. Posibilidad de varios Docks a la vez (Multi-instancia).
+3. Posibilidad de minimizar/ocultar la barra en un pequeño icono minimalista
+4. Añadir panel estrecho al dock con accesos del sistema como:
+- Panel de control  
+- Ejecutar  
+- Buscar  
+- Configuración  
+- Administrador de tareas  
+- Servicios  
+- CMD / PowerShell  
+- Apagar / Reiniciar / Suspender
+5. Multilenguaje
+6. Temas visuales
 
 ---
 
-## 🎯 Características
+## 📥 Descargar
 
-### Barra principal
-- Se ancla en la **parte superior, inferior** de la pantalla o **flotante** (arrastrable)
-- **Auto-ocultación**: se esconde dejando solo 4px visibles; reaparece al acercar el ratón
-- Siempre encima del resto de ventanas (**always on top**)
-- Iconos de los programas extraídos automáticamente
-
-### Menús desplegables
-- Se abren automáticamente al **pasar el ratón** sobre la categoría
-- Se cierran cuando el ratón sale del desplegable (con pequeño retardo para comodidad)
-- Scroll automático si hay muchos accesos directos
-
-### Drag & Drop
-- **Arrastra** cualquier archivo, carpeta o acceso directo (.lnk) del escritorio encima de una categoría
-- El icono y nombre se añaden automáticamente
-- Los accesos directos de Windows (.lnk) se resuelven al programa real
-
-### Modo Edición (✏)
-- Actívalo desde el **icono de bandeja del sistema** o doble clic en él
-- **Renombrar categorías**: haz clic en el nombre
-- **Reordenar categorías**: botones ◀ ▶ en modo edición
-- **Reordenar accesos directos**: botones ▲ ▼ en cada ítem
-- **Eliminar** categorías o accesos directos
-- **Añadir accesos directos** con el botón ＋ o arrastrando desde el escritorio
-- Los cambios se guardan automáticamente al salir del modo edición
-
-### Configuración (⚙)
-- Posición: Arriba / Abajo / Flotante
-- Auto-ocultar: sí / no
-- Tamaño de iconos: 16 / 32 / 48 px
+👉 **Última versión del instalador:**  
+https://github.com/jlacaci/LaunchDock/releases/latest
 
 ---
 
-## 📁 Archivos de configuración
+## 🖼️ Capturas de pantalla
 
-La configuración y tus categorías se guardan en:
-```
-C:\Users\TuUsuario\AppData\Roaming\LaunchDock\config.json
-```
-Puedes editar este archivo a mano si lo necesitas.
-
----
-
-## 🚀 Arrancar con Windows
-
-Para que LaunchDock se inicie automáticamente con Windows:
-1. Crea un acceso directo de `LaunchDock.exe`
-2. Pulsa `Win + R` → escribe `shell:startup`
-3. Mueve el acceso directo a esa carpeta
+<img width="1166" height="105" alt="image" src="https://github.com/user-attachments/assets/180211c9-00c6-4d1a-ae85-3d5106d9e8bb" />
+<img width="1186" height="325" alt="image" src="https://github.com/user-attachments/assets/26657866-8696-477b-bcb7-3777ef8b584b" />
+<img width="1151" height="307" alt="image" src="https://github.com/user-attachments/assets/319f707c-3f70-4044-837e-b5c4f3ecea44" />
+<img width="505" height="600" alt="image" src="https://github.com/user-attachments/assets/2d19f338-8f3a-491f-926e-61bf315c674c" />
+<img width="1437" height="383" alt="image" src="https://github.com/user-attachments/assets/a91d8ea5-fe05-4d8e-a862-0b1ae08d7d25" />
+<img width="434" height="505" alt="image" src="https://github.com/user-attachments/assets/d19fa895-07e2-4f79-88a9-d9caac43147d" />
 
 ---
 
-## 📦 Estructura del proyecto
+## ✨ Características principales
 
-```
-LaunchDock/
-├── App.xaml / App.xaml.cs          ← Punto de entrada + bandeja del sistema
-├── Models/
-│   └── Models.cs                   ← Modelos de datos (categorías, accesos)
-├── Helpers/
-│   ├── ConfigManager.cs            ← Carga/guarda config en JSON
-│   └── IconHelper.cs               ← Extrae iconos de .exe, carpetas, .lnk
-├── Views/
-│   ├── MainBarWindow.xaml/.cs      ← Ventana principal de la barra
-│   ├── CategoryControl.cs          ← Control de categoría + desplegable
-│   └── SettingsWindow.xaml/.cs     ← Ventana de configuración
-└── Resources/
-    └── Styles.xaml                 ← Tema visual oscuro
-```
+- Dock flotante siempre visible
+- Categorías personalizables (Ofimática, Internet, Foto, Vídeo, Audio…)
+- Animaciones suaves y diseño moderno
+- Iconos personalizados sin flecha de acceso directo
+- Soporte completo para apps UWP/Store
+- Modo edición con botones compactos
+- Scroll horizontal cuando hay muchas categorías
+- Caché de iconos para arranques más rápidos
+- Configuración persistente en `%AppData%`
+- Compatible con múltiples monitores y DPI-aware
+
+---
+
+## 🛠️ Instalación
+
+1. Descarga el instalador desde la sección **Releases**
+2. Ejecuta el archivo `.exe`
+3. LaunchDock se instalará en tu sistema y aparecerá automáticamente en pantalla
+4. Puedes abrir la configuración desde el icono de la barra
+
+---
+
+## 🎮 Uso básico
+
+- **Añadir accesos directos:** botón `+` o arrastrar archivos
+- **Cambiar iconos:** clic derecho → Cambiar icono
+- **Modo edición:** botón del lápiz en la barra
+- **Mover categorías:** arrastrar y soltar
+- **Limpiar caché de iconos:** Configuración → Limpiar caché
+
+---
+
+## 📝 Notas de la versión
+
+Consulta el historial completo en:  
+👉 [`CHANGELOG.md`](CHANGELOG.md)
+
+Última versión publicada: **1.2.1**
+
+---
+
+## 🧩 Problemas conocidos
+
+- Algunos accesos directos UWP pueden tardar en extraer icono la primera vez
+- En configuraciones multi-monitor muy complejas, la posición inicial puede variar
+
+---
+
+## ❤️ Apoya el proyecto
+
+Si LaunchDock te resulta útil, puedes apoyar su desarrollo:
+
+👉 **PayPal:** *https://www.paypal.me/jlacaci*
+
+<img width="150" height="150" alt="qrcode" src="https://github.com/user-attachments/assets/890cc34c-ae25-452e-9b26-e4274f3d9a74" />
+
+Escanéalo con tu móvil para donar fácilmente, por supuesto no es obligatorio, pero se agradece un montón!
+
+
+
+---
+
+## 📄 Licencia
+
+Este proyecto está licenciado bajo **MIT License**.  
+Puedes usarlo, modificarlo y distribuirlo libremente.
+
+---
+
+## 👨‍💻 Autor
+
+**Jorge Griñán Lacaci**  
+Desarrollador independiente  
