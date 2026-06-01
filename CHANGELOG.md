@@ -6,6 +6,14 @@ Formato: `[versión] — fecha`
 
 ---
 
+## [1.5.2] — 2025
+
+### ?? Bugs arreglados / Mejoras visuales
+
+- **Icono del Panel del sistema ahora visible en todos los temas**: el icono `?` Unicode no se veía correctamente en fondos oscuros. Reemplazado por un icono del logo de Windows dibujado en XAML puro con 4 rectángulos. Usa el mismo `Foreground` que el lápiz y el engranaje, cambia al color de acento al hacer hover y es independiente de archivos externos.
+
+---
+
 ## [1.5.1] — 2025
 
 ### ?? Bugs arreglados

@@ -146,10 +146,18 @@
                             <Grid>
                                 <Button x:Name="SystemPanelBtn"
                                         Style="{StaticResource IconButtonStyle}"
-                                        Content="⊞" ToolTip="Panel del sistema"
+                                        ToolTip="Panel del sistema"
                                         Click="SystemPanel_Click"
-                                        Margin="4,0" Width="36" Height="36"
-                                        FontSize="30" Padding="0,0,0,4" VerticalContentAlignment="Center"/>
+                                        Margin="4,0" Width="36" Height="36">
+                                    <Viewbox Width="18" Height="18">
+                                        <Grid Width="20" Height="20">
+                                            <Rectangle Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="8.5" Height="8.5" HorizontalAlignment="Left"  VerticalAlignment="Top"/>
+                                            <Rectangle Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="8.5" Height="8.5" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                                            <Rectangle Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="8.5" Height="8.5" HorizontalAlignment="Left"  VerticalAlignment="Bottom"/>
+                                            <Rectangle Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="8.5" Height="8.5" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+                                        </Grid>
+                                    </Viewbox>
+                                </Button>
                                 <Popup x:Name="SystemPopup"
                                        PlacementTarget="{Binding ElementName=SystemPanelBtn}"
                                        Placement="Bottom"

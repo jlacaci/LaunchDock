@@ -85,7 +85,7 @@ https://github.com/jlacaci/LaunchDock/releases/latest
 Consulta el historial completo en:  
 👉 [`CHANGELOG.md`](CHANGELOG.md)
 
-Última versión publicada: **1.5.1**
+Última versión publicada: **1.5.2**
 
 ---
 
