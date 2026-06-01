@@ -629,11 +629,25 @@ public class CategoryControl : UserControl
         {
             string? resolved = IconHelper.ResolveShortcut(path);
 
+            // Si resolved sigue siendo el .lnk original (app UWP sin TargetPath real),
+            // copiar el .lnk a AppData para que sea independiente de su ubicación original
+            string stablePath = resolved ?? path;
+            if (string.Equals(stablePath, path, StringComparison.OrdinalIgnoreCase))
+            {
+                string shortcutsDir = Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                    "LaunchDock", "shortcuts");
+                Directory.CreateDirectory(shortcutsDir);
+                string destLnk = Path.Combine(shortcutsDir, Path.GetFileName(path));
+                File.Copy(path, destLnk, overwrite: true);
+                stablePath = destLnk;
+            }
+
             var sc = new ShortcutModel
             {
                 Name = name,
-                TargetPath = resolved ?? path,
-                IconPath = iconPngPath  // Guardar ruta del PNG
+                TargetPath = stablePath,
+                IconPath = iconPngPath
             };
             Model.Shortcuts.Add(sc);
         }

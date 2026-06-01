@@ -429,6 +429,48 @@ public partial class MainBarWindow : Window
         ctrl.StartRenaming();
     }
 
+    private void SystemPanel_Click(object sender, RoutedEventArgs e)
+        => SystemPopup.IsOpen = !SystemPopup.IsOpen;
+
+    private void SystemItem_Click(object sender, RoutedEventArgs e)
+    {
+        SystemPopup.IsOpen = false;
+        if (sender is not System.Windows.Controls.Button btn) return;
+        string tag = btn.Tag?.ToString() ?? "";
+        if (string.IsNullOrEmpty(tag)) return;
+
+        try
+        {
+            if (tag == "run")
+            {
+                // Abrir diálogo Ejecutar via ShellExecute
+                Process.Start(new ProcessStartInfo("rundll32.exe", "shell32.dll,#61") { UseShellExecute = true });
+                return;
+            }
+            if (tag == "search")
+            {
+                Process.Start(new ProcessStartInfo("explorer.exe", "search-ms:") { UseShellExecute = true });
+                return;
+            }
+            if (tag.StartsWith("shutdown") || tag.StartsWith("rundll32"))
+            {
+                // Comandos con argumentos
+                var parts = tag.Split(' ', 2);
+                var psi = new ProcessStartInfo(parts[0], parts.Length > 1 ? parts[1] : "")
+                    { UseShellExecute = true };
+                Process.Start(psi);
+                return;
+            }
+            // Resto: control, ms-settings:, taskmgr, services.msc, cmd, powershell
+            Process.Start(new ProcessStartInfo(tag) { UseShellExecute = true });
+        }
+        catch (Exception ex)
+        {
+            System.Windows.MessageBox.Show($"No se pudo abrir: {ex.Message}", "Error",
+                System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+        }
+    }
+
     private void EditMode_Click(object sender, RoutedEventArgs e)
         => ToggleEditMode();
 

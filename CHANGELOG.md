@@ -1,7 +1,25 @@
 # Changelog — LaunchDock
+# Changelog — LaunchDock
 
 Todos los cambios relevantes del proyecto se documentan aquí.  
 Formato: `[versión] — fecha`
+
+---
+
+## [1.5.0] — 2025
+
+### ?? Bugs arreglados
+
+- **Accesos directos UWP/Store se rompen al borrar el .lnk de origen**: al añadir apps como WhatsApp, Telegram, YouTube, Copilot u Outlook desde un acceso directo del escritorio, si ese acceso se borraba el dock dejaba de abrirlas. Ahora, si el `.lnk` no tiene ejecutable real (apps UWP), el archivo se copia automáticamente a `%AppData%\LaunchDock\shortcuts\` y se guarda esa ruta estable e independiente de la ubicación original.
+- **Transmission abría el `.ico` en lugar del programa**: `ResolveShortcut` estaba leyendo la ruta del icono en vez del ejecutable real. Corregida la resolución del target para estos casos.
+
+### ? Mejoras
+
+- **Panel del sistema** (`?`): nuevo botón en la barra principal que despliega un menú con accesos rápidos del sistema:
+  - Panel de control, Ejecutar, Buscar, Configuración de Windows
+  - Administrador de tareas, Servicios
+  - CMD, PowerShell
+  - Apagar, Reiniciar, Suspender
 
 ---
 
@@ -9,7 +27,7 @@ Formato: `[versión] — fecha`
 
 ### ? Mejoras
 
-- **Backup / Restore de configuración**: nueva sección en Configuración con dos botones:
+- **Backup / Restore de configuraci
   - `?? Exportar` — guarda el `config.json` completo (categorías, accesos directos, colores, fuente, posición…) en la ruta que elija el usuario.
   - `?? Importar` — carga un `config.json` previamente exportado y lo aplica al reiniciar LaunchDock. Incluye confirmación antes de sobreescribir.
 

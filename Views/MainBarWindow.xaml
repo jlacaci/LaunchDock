@@ -142,6 +142,46 @@
                                     Margin="4,0"
                                     ToolTip="Guardar cambios y salir del modo edición"/>
 
+                            <!-- Sistema button + popup -->
+                            <Grid>
+                                <Button x:Name="SystemPanelBtn"
+                                        Style="{StaticResource IconButtonStyle}"
+                                        Content="⊞" ToolTip="Panel del sistema"
+                                        Click="SystemPanel_Click"
+                                        Margin="4,0" Width="36" Height="36"
+                                        FontSize="30" Padding="0,0,0,4" VerticalContentAlignment="Center"/>
+                                <Popup x:Name="SystemPopup"
+                                       PlacementTarget="{Binding ElementName=SystemPanelBtn}"
+                                       Placement="Bottom"
+                                       StaysOpen="False"
+                                       AllowsTransparency="True"
+                                       PopupAnimation="Fade">
+                                    <Border Background="#EE1E1E35"
+                                            CornerRadius="0,0,10,10"
+                                            MinWidth="220"
+                                            BorderBrush="#33FFFFFF" BorderThickness="1">
+                                        <Border.Effect>
+                                            <DropShadowEffect Color="Black" BlurRadius="20" ShadowDepth="4" Opacity="0.6"/>
+                                        </Border.Effect>
+                                        <StackPanel Margin="4,6,4,6">
+                                            <Button Content="🖥️  Panel de control"    Tag="control"                                          Click="SystemItem_Click" Style="{StaticResource ShortcutItemStyle}"/>
+                                            <Button Content="⚡  Ejecutar"             Tag="run"                                              Click="SystemItem_Click" Style="{StaticResource ShortcutItemStyle}"/>
+                                            <Button Content="🔍  Buscar"               Tag="search"                                           Click="SystemItem_Click" Style="{StaticResource ShortcutItemStyle}"/>
+                                            <Button Content="⚙️  Configuración"       Tag="ms-settings:"                                     Click="SystemItem_Click" Style="{StaticResource ShortcutItemStyle}"/>
+                                            <Button Content="📋  Adm. de tareas"      Tag="taskmgr"                                          Click="SystemItem_Click" Style="{StaticResource ShortcutItemStyle}"/>
+                                            <Button Content="🔧  Servicios"            Tag="services.msc"                                     Click="SystemItem_Click" Style="{StaticResource ShortcutItemStyle}"/>
+                                            <Separator Margin="8,4" Background="#33FFFFFF"/>
+                                            <Button Content="🖥️  CMD"                  Tag="cmd"                                              Click="SystemItem_Click" Style="{StaticResource ShortcutItemStyle}"/>
+                                            <Button Content="🖥️  PowerShell"          Tag="powershell"                                       Click="SystemItem_Click" Style="{StaticResource ShortcutItemStyle}"/>
+                                            <Separator Margin="8,4" Background="#33FFFFFF"/>
+                                            <Button Content="🛌  Apagar"               Tag="shutdown /s /t 0"                                 Click="SystemItem_Click" Style="{StaticResource ShortcutItemStyle}"/>
+                                            <Button Content="🔄  Reiniciar"            Tag="shutdown /r /t 0"                                 Click="SystemItem_Click" Style="{StaticResource ShortcutItemStyle}"/>
+                                            <Button Content="💤  Suspender"            Tag="rundll32 powrprof.dll,SetSuspendState 0,1,0"   Click="SystemItem_Click" Style="{StaticResource ShortcutItemStyle}"/>
+                                        </StackPanel>
+                                    </Border>
+                                </Popup>
+                            </Grid>
+
                             <!-- Edit mode button -->
                             <Button x:Name="EditModeBtn"
                                     Style="{StaticResource IconButtonStyle}"
