@@ -255,6 +255,12 @@ public static class IconHelper
             if (string.IsNullOrEmpty(targetPath) || !File.Exists(targetPath))
                 return lnkPath;
 
+            // Verificar que es un ejecutable real, no un recurso como .ico
+            string ext = Path.GetExtension(targetPath).ToLower();
+            bool isExecutable = ext == ".exe" || ext == ".bat" || ext == ".cmd" || ext == ".com" || ext == ".msi";
+            if (!isExecutable)
+                return lnkPath;
+
             return targetPath;
         }
         catch { return lnkPath; }

@@ -11,7 +11,7 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<PublishTrimmed>false</PublishTrimmed>
 		<ApplicationIcon>LaunchDock.ico</ApplicationIcon>
-		<Version>1.5.0</Version>
+		<Version>1.5.1</Version>
 		<Authors>Tu Nombre</Authors>
 		<Company>Tu Compañía</Company>
 		<Product>LaunchDock</Product>
