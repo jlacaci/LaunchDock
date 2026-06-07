@@ -274,6 +274,15 @@
                                  Text="#EAEAEA"/>
                     </StackPanel>
 
+                    <StackPanel Margin="0,0,0,16">
+                        <TextBlock Text="Color fondo menú desplegable" Foreground="#EAEAEA" FontSize="11" Margin="0,0,0,4"/>
+                        <TextBox x:Name="PopupMenuColorText"
+                                 Background="#2A2A4A" Foreground="#EAEAEA"
+                                 BorderBrush="#444466" BorderThickness="1"
+                                 FontFamily="Consolas" FontSize="12" Height="32" Padding="8,6"
+                                 Text="#EE1E1E35"/>
+                    </StackPanel>
+
                     <!-- Fuente -->
                     <TextBlock Text="FUENTE" FontSize="10" FontWeight="Bold"
                                Foreground="#9A9AB0" Margin="0,0,0,8"/>
@@ -402,19 +411,36 @@
                                 Cursor="Hand" Margin="12,0,0,0" VerticalAlignment="Center"/>
                     </Grid>
                 </Border>
-                <!-- Cancelar / Guardar -->
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Content="Cancelar" Click="Cancel_Click"
-                            Background="#2A2A4A" Foreground="#9A9AB0"
-                            BorderThickness="1" BorderBrush="#444466"
-                            Padding="16,8" FontFamily="Segoe UI" FontSize="13" Cursor="Hand"
-                            Width="100" Margin="0,0,12,0"/>
-                    <Button Content="Guardar" Click="Save_Click"
-                            Background="#E94560" Foreground="White"
-                            BorderThickness="0"
-                            Padding="16,8" FontFamily="Segoe UI Semibold" FontSize="13"
-                            FontWeight="SemiBold" Cursor="Hand" Width="100"/>
-                </StackPanel>
+                <!-- Cancelar / Guardar / Cerrar barra -->
+                <Grid>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <!-- Botón cerrar barra: solo visible en barras secundarias (se controla desde code-behind) -->
+                        <Button x:Name="CloseBarBtn"
+                                Content="🗑 Cerrar esta barra"
+                                Click="CloseBar_Click"
+                                Visibility="Collapsed"
+                                Background="#7B1E1E" Foreground="#FF8080"
+                                BorderThickness="1" BorderBrush="#AA3333"
+                                Padding="14,8" FontFamily="Segoe UI" FontSize="12"
+                                Cursor="Hand"/>
+                        <TextBlock x:Name="VersionText"
+                                   Foreground="#555577" FontSize="11"
+                                   FontFamily="Segoe UI" VerticalAlignment="Center"
+                                   Margin="4,0,0,0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Content="Cancelar" Click="Cancel_Click"
+                                Background="#2A2A4A" Foreground="#9A9AB0"
+                                BorderThickness="1" BorderBrush="#444466"
+                                Padding="16,8" FontFamily="Segoe UI" FontSize="13" Cursor="Hand"
+                                Width="100" Margin="0,0,12,0"/>
+                        <Button Content="Guardar" Click="Save_Click"
+                                Background="#E94560" Foreground="White"
+                                BorderThickness="0"
+                                Padding="16,8" FontFamily="Segoe UI Semibold" FontSize="13"
+                                FontWeight="SemiBold" Cursor="Hand" Width="100"/>
+                    </StackPanel>
+                </Grid>
             </StackPanel>
         </Grid>
     </Border>

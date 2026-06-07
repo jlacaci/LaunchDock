@@ -15,9 +15,19 @@ public partial class App : System.Windows.Application
     {
         base.OnStartup(e);
         ConfigManager.Load();
-        
+        BarManager.Load();
+
         _mainWindow = new MainBarWindow();
         _mainWindow.Show();
+
+        // Restaurar barras secundarias guardadas
+        foreach (var barId in BarManager.BarIds)
+        {
+            var mgr = new ConfigManager(barId);
+            mgr.LoadInstance();
+            var bar = new MainBarWindow(mgr, isPrimary: false);
+            bar.Show();
+        }
 
         SetupTrayIcon();
     }

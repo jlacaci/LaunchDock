@@ -13,7 +13,7 @@ Rápido, ligero, elegante y compatible con aplicaciones Win32, UWP y Microsoft S
 Próximos Cambios y Mejoras a implementar:
 
 1. ~~Posibilidad de guardar la configuracion en archivo json (Backup/Restore).~~ ✅ Implementado en v1.4.0
-2. Posibilidad de varios Docks a la vez (Multi-instancia).
+2. ~~Posibilidad de varios Docks a la vez (Multi-instancia).~~ ✅ Implementado en v1.6.0
 3. Posibilidad de minimizar/ocultar la barra en un pequeño icono minimalista
 4. ~~Añadir panel estrecho al dock con accesos del sistema~~ ✅ Implementado en v1.5.0
 5. Multilenguaje
@@ -53,11 +53,16 @@ https://github.com/jlacaci/LaunchDock/releases/latest
 - **5 temas de color predefinidos:** Oscuro, Drácula, Nord, Claro, Neumórfico Oscuro
 - **Radio de esquinas configurable** (slider 0–20 px)
 - **Panel del sistema** (`⊞`): accesos rápidos a Panel de control, Ejecutar, Buscar, Configuración, Administrador de tareas, Servicios, CMD, PowerShell, Apagar/Reiniciar/Suspender
+- **Multi-barra**: crea varias barras independientes, cada una con su propia configuración y tema
+- **Color fondo menú desplegable** configurable por barra
+- **Esquinas redondeadas transparentes** en menús y ventana de configuración
+- **Botones de acción adaptativos** según orientación horizontal/vertical
 - Color de acento, fondo y texto totalmente personalizables
 - Configuración persistente en `%AppData%`
 - Compatible con múltiples monitores y DPI-aware
 - Categorías por defecto en primera instalación
 - Accesos directos UWP/Store guardados de forma estable (independiente de la ubicación del `.lnk`)
+- Versión del programa visible en la ventana de Configuración
 
 ---
 
@@ -85,7 +90,7 @@ https://github.com/jlacaci/LaunchDock/releases/latest
 Consulta el historial completo en:  
 👉 [`CHANGELOG.md`](CHANGELOG.md)
 
-Última versión publicada: **1.5.2**
+Última versión publicada: **1.6.0**
 
 ---
 

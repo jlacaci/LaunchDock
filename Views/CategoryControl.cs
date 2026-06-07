@@ -105,6 +105,8 @@ public class CategoryControl : UserControl
                 Opacity = 0.7
             }
         };
+        // Recortar el Border para que las esquinas redondeadas sean realmente transparentes
+        popupBorder.Loaded += (s, e) => ClipBorderToCornerRadius(popupBorder);
         _popupBorder = popupBorder;
 
         popupBorder.MouseEnter += (s, e) => _closeTimer.Stop();
@@ -764,10 +766,10 @@ public class CategoryControl : UserControl
             UpdateHeaderContent();
 
             // Aplicar color de fondo del popup
-            var bgColor = (Color)System.Windows.Media.ColorConverter.ConvertFromString(ConfigManager.Config.BackgroundColor);
-            // Hacer el popup ligeramente más oscuro
-            bgColor.A = 0xEE;
-            _popupBorder.Background = new SolidColorBrush(bgColor);
+            var popupColor = (Color)System.Windows.Media.ColorConverter.ConvertFromString(
+                ConfigManager.Config.PopupMenuColor?.Length > 0 ? ConfigManager.Config.PopupMenuColor : "#EE1E1E35");
+            _popupBorder.Background = new SolidColorBrush(popupColor);
+            ClipBorderToCornerRadius(_popupBorder);
 
             // Reconstruir items para aplicar estilos a los elementos del menú
             BuildItems();
@@ -776,5 +778,33 @@ public class CategoryControl : UserControl
         {
             System.Diagnostics.Debug.WriteLine($"Error applying customization: {ex.Message}");
         }
+    }
+
+    /// <summary>
+    /// Recorta el Border con un RectangleGeometry que respeta el CornerRadius,
+    /// para que las esquinas redondeadas sean realmente transparentes.
+    /// </summary>
+    private static void ClipBorderToCornerRadius(Border border)
+    {
+        if (border.ActualWidth <= 0 || border.ActualHeight <= 0) return;
+        var cr = border.CornerRadius;
+        var geo = new System.Windows.Media.StreamGeometry();
+        using (var ctx = geo.Open())
+        {
+            double w = border.ActualWidth;
+            double h = border.ActualHeight;
+            double tl = cr.TopLeft, tr = cr.TopRight, br = cr.BottomRight, bl = cr.BottomLeft;
+            ctx.BeginFigure(new System.Windows.Point(tl, 0), true, true);
+            ctx.LineTo(new System.Windows.Point(w - tr, 0), true, false);
+            ctx.ArcTo(new System.Windows.Point(w, tr), new System.Windows.Size(tr, tr), 0, false, System.Windows.Media.SweepDirection.Clockwise, true, false);
+            ctx.LineTo(new System.Windows.Point(w, h - br), true, false);
+            ctx.ArcTo(new System.Windows.Point(w - br, h), new System.Windows.Size(br, br), 0, false, System.Windows.Media.SweepDirection.Clockwise, true, false);
+            ctx.LineTo(new System.Windows.Point(bl, h), true, false);
+            ctx.ArcTo(new System.Windows.Point(0, h - bl), new System.Windows.Size(bl, bl), 0, false, System.Windows.Media.SweepDirection.Clockwise, true, false);
+            ctx.LineTo(new System.Windows.Point(0, tl), true, false);
+            ctx.ArcTo(new System.Windows.Point(tl, 0), new System.Windows.Size(tl, tl), 0, false, System.Windows.Media.SweepDirection.Clockwise, true, false);
+        }
+        geo.Freeze();
+        border.Clip = geo;
     }
 }

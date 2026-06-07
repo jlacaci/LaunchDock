@@ -7,6 +7,7 @@ namespace LaunchDock.Models;
 
 public class AppConfig
 {
+    public string BarId { get; set; } = "main";           // "main" o GUID para barras secundarias
     public string Position { get; set; } = "Bottom";       // Top, Bottom, Left, Right, Floating
     public bool AutoHide { get; set; } = false;
     public string Theme { get; set; } = "Dark";            // Dark, Light
@@ -19,6 +20,7 @@ public class AppConfig
     public string BackgroundColor { get; set; } = "#CC1A1A2E";
     public string AccentColor { get; set; } = "#E94560";
     public string TextColor { get; set; } = "#EAEAEA";
+    public string PopupMenuColor { get; set; } = "#EE1E1E35";  // Color fondo menú desplegable
     public string ThemeName { get; set; } = "Oscuro";
     public int CornerRadiusValue { get; set; } = 12;
     public string FontFamily { get; set; } = "Segoe UI";

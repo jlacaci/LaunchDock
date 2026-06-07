@@ -17,15 +17,27 @@ namespace LaunchDock.Views;
 public partial class MainBarWindow : Window
 {
     public bool IsEditMode { get; private set; } = false;
+    public bool IsPrimary { get; private set; } = true;
 
     private readonly List<CategoryControl> _categoryControls = new();
     private DispatcherTimer? _hideTimer;
     private bool _isHidden = false;
+    private readonly DispatcherTimer _systemCloseTimer;
+    private readonly ConfigManager _configManager;
 
-    public MainBarWindow()
+    // Acceso cómodo a la config de esta barra
+    private AppConfig Cfg => _configManager.InstanceConfig;
+
+    public MainBarWindow() : this(ConfigManager.Instance, isPrimary: true) { }
+
+    public MainBarWindow(ConfigManager configManager, bool isPrimary)
     {
         InitializeComponent();
         DataContext = this;
+        _configManager = configManager;
+        IsPrimary = isPrimary;
+        _systemCloseTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(300) };
+        _systemCloseTimer.Tick += (s, e) => { _systemCloseTimer.Stop(); SystemPopup.IsOpen = false; };
         Loaded += OnLoaded;
     }
 
@@ -34,6 +46,13 @@ public partial class MainBarWindow : Window
         BuildCategories();
         ApplyConfig();
         SetupAutoHide();
+
+        // Ocultar panel sistema y botón nueva barra en barras secundarias
+        if (!IsPrimary)
+        {
+            if (SystemPanelGroup != null) SystemPanelGroup.Visibility = Visibility.Collapsed;
+            if (AddBarBtn != null) AddBarBtn.Visibility = Visibility.Collapsed;
+        }
 
         // Permitir scroll horizontal con la rueda del ratón sobre las categorías
         var scrollViewer = FindScrollViewer(CategoriesItemsControl);
@@ -59,7 +78,7 @@ public partial class MainBarWindow : Window
 
     private void ApplyConfig()
     {
-        var cfg = ConfigManager.Config;
+        var cfg = Cfg;
 
         // Apply orientation (forzar vertical si es Left o Right)
         var effectiveOrientation = (cfg.Position == "Left" || cfg.Position == "Right") 
@@ -87,7 +106,7 @@ public partial class MainBarWindow : Window
 
     private void ApplyCustomization()
     {
-        var cfg = ConfigManager.Config;
+        var cfg = Cfg;
 
         // Aplicar color de fondo
         try
@@ -120,39 +139,58 @@ public partial class MainBarWindow : Window
 
     private void ApplyOrientation(string orientation)
     {
-        if (orientation == "Vertical")
+        bool isVertical = orientation == "Vertical";
+
+        if (isVertical)
         {
-            // Cambiar la orientación del ItemsControl interno
             var itemsPanelTemplate = new ItemsPanelTemplate();
             var factory = new FrameworkElementFactory(typeof(StackPanel));
             factory.SetValue(StackPanel.OrientationProperty, Orientation.Vertical);
             itemsPanelTemplate.VisualTree = factory;
             CategoriesItemsControl.ItemsPanel = itemsPanelTemplate;
-
-            // Ajustar el tamaño de la ventana para modo vertical
             SizeToContent = SizeToContent.WidthAndHeight;
-            Width = double.NaN; // Auto
-            Height = double.NaN; // Auto
+            Width = double.NaN;
+            Height = double.NaN;
         }
         else
         {
-            // Orientación horizontal (por defecto)
             var itemsPanelTemplate = new ItemsPanelTemplate();
             var factory = new FrameworkElementFactory(typeof(StackPanel));
             factory.SetValue(StackPanel.OrientationProperty, Orientation.Horizontal);
             itemsPanelTemplate.VisualTree = factory;
             CategoriesItemsControl.ItemsPanel = itemsPanelTemplate;
-
-            // Resetear Width para que PositionWindow lo calcule limpio
             Width = double.NaN;
             SizeToContent = SizeToContent.WidthAndHeight;
         }
 
-        // Notificar a todos los controles de categoría sobre el cambio
-        foreach (var ctrl in _categoryControls)
+        // Mostrar botones en el panel correcto según orientación
+        AddCategoryBtn.Visibility  = Visibility.Collapsed;
+        ExitEditBtn.Visibility     = Visibility.Collapsed;
+        AddCategoryBtnV.Visibility = Visibility.Collapsed;
+        ExitEditBtnV.Visibility    = Visibility.Collapsed;
+
+        if (isVertical)
         {
-            ctrl.SetOrientation(orientation);
+            EditModeBtn.Visibility           = Visibility.Collapsed;
+            SettingsBtn.Visibility           = Visibility.Collapsed;
+            AddBarBtn.Visibility             = Visibility.Collapsed;
+            SystemPanelGroup.Visibility      = Visibility.Collapsed;
+            VerticalActionButtons.Visibility = Visibility.Visible;
+            EditModeBtnV.Visibility          = Visibility.Visible;
+            SettingsBtnV.Visibility          = Visibility.Visible;
+            AddBarBtnV.Visibility            = IsPrimary ? Visibility.Visible : Visibility.Collapsed;
         }
+        else
+        {
+            VerticalActionButtons.Visibility = Visibility.Collapsed;
+            EditModeBtn.Visibility           = Visibility.Visible;
+            SettingsBtn.Visibility           = Visibility.Visible;
+            AddBarBtn.Visibility             = IsPrimary ? Visibility.Visible : Visibility.Collapsed;
+            SystemPanelGroup.Visibility      = IsPrimary ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        foreach (var ctrl in _categoryControls)
+            ctrl.SetOrientation(orientation);
 
         // Forzar actualización del layout
         UpdateLayout();
@@ -163,7 +201,7 @@ public partial class MainBarWindow : Window
     private void PositionWindow(string position, double floatX, double floatY)
     {
         var screen = System.Windows.SystemParameters.WorkArea;
-        var orientation = ConfigManager.Config.Orientation ?? "Horizontal";
+        var orientation = Cfg.Orientation ?? "Horizontal";
 
         switch (position)
         {
@@ -235,7 +273,7 @@ public partial class MainBarWindow : Window
         CategoriesItemsControl.Items.Clear();
         _categoryControls.Clear();
 
-        var cfg = ConfigManager.Config;
+        var cfg = Cfg;
 
         foreach (var cat in cfg.Categories)
         {
@@ -253,8 +291,15 @@ public partial class MainBarWindow : Window
         IsEditMode = !IsEditMode;
         OnPropertyChanged(nameof(IsEditMode));
 
-        AddCategoryBtn.Visibility = IsEditMode ? Visibility.Visible : Visibility.Collapsed;
-        ExitEditBtn.Visibility = IsEditMode ? Visibility.Visible : Visibility.Collapsed;
+        bool isVertical = Cfg.Orientation == "Vertical" ||
+                          Cfg.Position == "Left" || Cfg.Position == "Right";
+
+        // Botones panel horizontal
+        AddCategoryBtn.Visibility  = (!isVertical && IsEditMode) ? Visibility.Visible : Visibility.Collapsed;
+        ExitEditBtn.Visibility     = (!isVertical && IsEditMode) ? Visibility.Visible : Visibility.Collapsed;
+        // Botones panel vertical
+        AddCategoryBtnV.Visibility = (isVertical && IsEditMode)  ? Visibility.Visible : Visibility.Collapsed;
+        ExitEditBtnV.Visibility    = (isVertical && IsEditMode)   ? Visibility.Visible : Visibility.Collapsed;
 
         foreach (var ctrl in _categoryControls)
             ctrl.SetEditMode(IsEditMode);
@@ -265,11 +310,10 @@ public partial class MainBarWindow : Window
         }
         else
         {
-            // Quitar restricción de tamaño y volver al layout normal
             MaxWidth = double.PositiveInfinity;
             MaxHeight = double.PositiveInfinity;
             ApplyConfig();
-            ConfigManager.Save();
+            _configManager.SaveInstance();
         }
     }
 
@@ -282,7 +326,7 @@ public partial class MainBarWindow : Window
         // Obtener el área de trabajo del monitor donde está la ventana
         var workArea = GetCurrentMonitorWorkArea();
 
-        var cfg = ConfigManager.Config;
+        var cfg = Cfg;
         var position = cfg.Position ?? "Top";
 
         if (position == "Top" || position == "Bottom")
@@ -360,7 +404,7 @@ public partial class MainBarWindow : Window
 
     private void SetupAutoHide()
     {
-        if (!ConfigManager.Config.AutoHide) return;
+        if (!Cfg.AutoHide) return;
 
         MouseEnter += (s, e) => ShowBar();
         MouseLeave += (s, e) => StartHideTimer();
@@ -388,8 +432,7 @@ public partial class MainBarWindow : Window
         if (_isHidden) return;
         _isHidden = true;
 
-        var cfg = ConfigManager.Config;
-        double offset = cfg.Position == "Top" ? -(ActualHeight - 4) : (ActualHeight - 4);
+        double offset = Cfg.Position == "Top" ? -(ActualHeight - 4) : (ActualHeight - 4);
 
         if (RenderTransform is not TranslateTransform)
             RenderTransform = new TranslateTransform();
@@ -409,16 +452,16 @@ public partial class MainBarWindow : Window
     private void DragHandle_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
         DragMove();
-        ConfigManager.Config.Position = "Floating";
-        ConfigManager.Config.FloatX = Left;
-        ConfigManager.Config.FloatY = Top;
+        Cfg.Position = "Floating";
+        Cfg.FloatX = Left;
+        Cfg.FloatY = Top;
     }
 
     // ─── EVENT HANDLERS ───────────────────────────────────────────────────────
 
     private void AddCategory_Click(object sender, RoutedEventArgs e)
     {
-        var cfg = ConfigManager.Config;
+        var cfg = Cfg;
         var cat = new CategoryModel { Name = "NUEVA" };
         cfg.Categories.Add(cat);
         var ctrl = new CategoryControl(cat, this);
@@ -431,6 +474,21 @@ public partial class MainBarWindow : Window
 
     private void SystemPanel_Click(object sender, RoutedEventArgs e)
         => SystemPopup.IsOpen = !SystemPopup.IsOpen;
+
+    private void SystemPanelBtn_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+    {
+        _systemCloseTimer.Stop();
+        SystemPopup.IsOpen = true;
+    }
+
+    private void SystemPanelBtn_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        => _systemCloseTimer.Start();
+
+    private void SystemPopup_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        => _systemCloseTimer.Stop();
+
+    private void SystemPopup_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        => _systemCloseTimer.Start();
 
     private void SystemItem_Click(object sender, RoutedEventArgs e)
     {
@@ -477,9 +535,29 @@ public partial class MainBarWindow : Window
     private void Settings_Click(object sender, RoutedEventArgs e)
         => OpenSettings();
 
+    private void AddBar_Click(object sender, RoutedEventArgs e)
+    {
+        string barId = BarManager.AddBar();
+        var mgr = new ConfigManager(barId);
+        mgr.LoadInstance();
+        // Desplazar la nueva barra 40px hacia abajo para que no tape la principal
+        mgr.InstanceConfig.Position = "Floating";
+        mgr.InstanceConfig.FloatX = Left + 40;
+        mgr.InstanceConfig.FloatY = Top + 40;
+        mgr.SaveInstance();
+        var bar = new MainBarWindow(mgr, isPrimary: false);
+        bar.Show();
+    }
+
+    public void CloseThisBar()
+    {
+        BarManager.RemoveBar(_configManager.BarId);
+        Close();
+    }
+
     public void OpenSettings()
     {
-        var win = new SettingsWindow();
+        var win = new SettingsWindow(_configManager);
         win.Owner = this;
         if (win.ShowDialog() == true)
         {
@@ -492,7 +570,7 @@ public partial class MainBarWindow : Window
     {
         _categoryControls.Remove(ctrl);
         CategoriesItemsControl.Items.Remove(ctrl);
-        ConfigManager.Config.Categories.Remove(model);
+        Cfg.Categories.Remove(model);
     }
 
     public void MoveCategoryUp(CategoryControl ctrl)
@@ -503,8 +581,8 @@ public partial class MainBarWindow : Window
         _categoryControls.Insert(idx - 1, ctrl);
         CategoriesItemsControl.Items.Remove(ctrl);
         CategoriesItemsControl.Items.Insert(idx - 1, ctrl);
-        ConfigManager.Config.Categories.RemoveAt(idx);
-        ConfigManager.Config.Categories.Insert(idx - 1, ctrl.Model);
+        Cfg.Categories.RemoveAt(idx);
+        Cfg.Categories.Insert(idx - 1, ctrl.Model);
     }
 
     public void MoveCategoryDown(CategoryControl ctrl)
@@ -515,8 +593,8 @@ public partial class MainBarWindow : Window
         _categoryControls.Insert(idx + 1, ctrl);
         CategoriesItemsControl.Items.Remove(ctrl);
         CategoriesItemsControl.Items.Insert(idx + 1, ctrl);
-        ConfigManager.Config.Categories.RemoveAt(idx);
-        ConfigManager.Config.Categories.Insert(idx + 1, ctrl.Model);
+        Cfg.Categories.RemoveAt(idx);
+        Cfg.Categories.Insert(idx + 1, ctrl.Model);
     }
 
     // INotifyPropertyChanged stub

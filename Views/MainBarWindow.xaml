@@ -86,12 +86,17 @@
 
                     <!-- Categories row -->
                     <Grid x:Name="CategoriesPanel" Grid.Row="1" MinHeight="42">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <!-- Botones de acción en modo vertical (debajo de categorías) -->
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <!-- Drag handle -->
                             <ColumnDefinition Width="36"/>
                             <!-- Categorías con scroll -->
                             <ColumnDefinition Width="*"/>
-                            <!-- Botones fijos: + Categoría, Guardar, ⚙ -->
+                            <!-- Botones fijos horizontal: + Categoría, Guardar, ⚙ -->
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
@@ -142,12 +147,14 @@
                                     Margin="4,0"
                                     ToolTip="Guardar cambios y salir del modo edición"/>
 
-                            <!-- Sistema button + popup -->
-                            <Grid>
+                            <!-- Sistema button + popup (solo barra principal) -->
+                            <Grid x:Name="SystemPanelGroup">
                                 <Button x:Name="SystemPanelBtn"
                                         Style="{StaticResource IconButtonStyle}"
                                         ToolTip="Panel del sistema"
                                         Click="SystemPanel_Click"
+                                        MouseEnter="SystemPanelBtn_MouseEnter"
+                                        MouseLeave="SystemPanelBtn_MouseLeave"
                                         Margin="4,0" Width="36" Height="36">
                                     <Viewbox Width="18" Height="18">
                                         <Grid Width="20" Height="20">
@@ -161,13 +168,15 @@
                                 <Popup x:Name="SystemPopup"
                                        PlacementTarget="{Binding ElementName=SystemPanelBtn}"
                                        Placement="Bottom"
-                                       StaysOpen="False"
+                                       StaysOpen="True"
                                        AllowsTransparency="True"
                                        PopupAnimation="Fade">
                                     <Border Background="#EE1E1E35"
                                             CornerRadius="0,0,10,10"
                                             MinWidth="220"
-                                            BorderBrush="#33FFFFFF" BorderThickness="1">
+                                            BorderBrush="#33FFFFFF" BorderThickness="1"
+                                            MouseEnter="SystemPopup_MouseEnter"
+                                            MouseLeave="SystemPopup_MouseLeave">
                                         <Border.Effect>
                                             <DropShadowEffect Color="Black" BlurRadius="20" ShadowDepth="4" Opacity="0.6"/>
                                         </Border.Effect>
@@ -198,12 +207,61 @@
                                     Margin="4,0" Width="36" FontSize="16"/>
 
                             <!-- Settings button -->
-                            <Button Style="{StaticResource IconButtonStyle}"
+                            <Button x:Name="SettingsBtn"
+                                    Style="{StaticResource IconButtonStyle}"
                                     Content="⚙" ToolTip="Configuración"
                                     Click="Settings_Click"
                                     Margin="4,0" Width="36" FontSize="16"/>
 
+                            <!-- Nueva barra (solo barra principal) -->
+                            <Button x:Name="AddBarBtn"
+                                    Style="{StaticResource IconButtonStyle}"
+                                    Content="＋" ToolTip="Nueva barra"
+                                    Click="AddBar_Click"
+                                    Margin="4,0" Width="36" FontSize="18"/>
+
                         </StackPanel>
+
+                        <!-- Botones de acción en modo VERTICAL (debajo de categorías) -->
+                        <StackPanel x:Name="VerticalActionButtons"
+                                    Grid.Row="1" Grid.ColumnSpan="3"
+                                    Orientation="Horizontal"
+                                    HorizontalAlignment="Center"
+                                    Visibility="Collapsed"
+                                    Margin="0,4,0,4">
+                            <Button x:Name="AddCategoryBtnV"
+                                    Content="＋ Categoría"
+                                    Style="{StaticResource CategoryButtonStyle}"
+                                    Visibility="Collapsed"
+                                    Click="AddCategory_Click"
+                                    Foreground="#E94560"
+                                    Margin="4,0"/>
+                            <Button x:Name="ExitEditBtnV"
+                                    Content="✓ GUARDAR"
+                                    Style="{StaticResource CategoryButtonStyle}"
+                                    Visibility="Collapsed"
+                                    Click="ExitEditMode_Click"
+                                    Background="#16C79A"
+                                    Foreground="White"
+                                    FontWeight="Bold"
+                                    Margin="4,0"/>
+                            <Button x:Name="EditModeBtnV"
+                                    Style="{StaticResource IconButtonStyle}"
+                                    Content="✏" ToolTip="Modo edición"
+                                    Click="EditMode_Click"
+                                    Margin="4,0" Width="36" FontSize="16"/>
+                            <Button x:Name="SettingsBtnV"
+                                    Style="{StaticResource IconButtonStyle}"
+                                    Content="⚙" ToolTip="Configuración"
+                                    Click="Settings_Click"
+                                    Margin="4,0" Width="36" FontSize="16"/>
+                            <Button x:Name="AddBarBtnV"
+                                    Style="{StaticResource IconButtonStyle}"
+                                    Content="＋" ToolTip="Nueva barra"
+                                    Click="AddBar_Click"
+                                    Margin="4,0" Width="36" FontSize="18"/>
+                        </StackPanel>
+
                     </Grid>
                 </Grid>
             </Grid>

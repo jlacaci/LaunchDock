@@ -4,22 +4,41 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using LaunchDock.Helpers;
+using LaunchDock.Models;
 using WpfMessageBox = System.Windows.MessageBox;
 
 namespace LaunchDock.Views;
 
 public partial class SettingsWindow : Window
 {
-    public SettingsWindow()
+    private readonly ConfigManager _configManager;
+    private AppConfig Cfg => _configManager.InstanceConfig;
+
+    public SettingsWindow() : this(ConfigManager.Instance) { }
+
+    public SettingsWindow(ConfigManager configManager)
     {
         InitializeComponent();
+        _configManager = configManager;
         LoadCurrentConfig();
         MouseLeftButtonDown += (s, e) => DragMove();
+        Loaded += (s, e) =>
+        {
+            ClipWindowToCornerRadius();
+            var ver = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            if (VersionText != null && ver != null)
+                VersionText.Text = $"v{ver.Major}.{ver.Minor}.{ver.Build}";
+        };
+
+        // Mostrar botón "Cerrar barra" solo en barras secundarias
+        if (CloseBarBtn != null)
+            CloseBarBtn.Visibility = configManager.BarId == "main"
+                ? Visibility.Collapsed : Visibility.Visible;
     }
 
     private void LoadCurrentConfig()
     {
-        var cfg = ConfigManager.Config;
+        var cfg = Cfg;
         foreach (ComboBoxItem item in PositionCombo.Items)
             if (item.Tag?.ToString() == cfg.Position) { PositionCombo.SelectedItem = item; break; }
         if (PositionCombo.SelectedIndex < 0) PositionCombo.SelectedIndex = 1;
@@ -35,6 +54,7 @@ public partial class SettingsWindow : Window
         BackgroundColorText.Text = cfg.BackgroundColor ?? "#CC1A1A2E";
         AccentColorText.Text     = cfg.AccentColor     ?? "#E94560";
         TextColorText.Text       = cfg.TextColor       ?? "#EAEAEA";
+        PopupMenuColorText.Text  = cfg.PopupMenuColor  ?? "#EE1E1E35";
         FontFamilyCombo.SelectedIndex = 0;
         foreach (ComboBoxItem item in FontFamilyCombo.Items)
             if (item.Tag?.ToString() == cfg.FontFamily) { FontFamilyCombo.SelectedItem = item; break; }
@@ -46,7 +66,7 @@ public partial class SettingsWindow : Window
 
     private void Save_Click(object sender, RoutedEventArgs e)
     {
-        var cfg = ConfigManager.Config;
+        var cfg = Cfg;
         if (PositionCombo.SelectedItem is ComboBoxItem sel) cfg.Position = sel.Tag?.ToString() ?? "Bottom";
         cfg.AutoHide    = AutoHideCheck.IsChecked == true;
         cfg.Orientation = OrientationVertical.IsChecked == true ? "Vertical" : "Horizontal";
@@ -56,11 +76,12 @@ public partial class SettingsWindow : Window
         cfg.BackgroundColor   = BackgroundColorText.Text;
         cfg.AccentColor       = AccentColorText.Text;
         cfg.TextColor         = TextColorText.Text;
+        cfg.PopupMenuColor    = PopupMenuColorText.Text;
         if (FontFamilyCombo.SelectedItem is ComboBoxItem fi) cfg.FontFamily = fi.Tag?.ToString() ?? "Segoe UI";
         cfg.FontSize          = (int)FontSizeSlider.Value;
         cfg.Opacity           = (int)OpacitySlider.Value;
         cfg.CornerRadiusValue = (int)CornerRadiusSlider.Value;
-        ConfigManager.Save();
+        _configManager.SaveInstance();
         DialogResult = true;
         Close();
     }
@@ -92,7 +113,8 @@ public partial class SettingsWindow : Window
         if (dlg.ShowDialog() != System.Windows.Forms.DialogResult.OK) return;
         try
         {
-            var src = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "LaunchDock", "config.json");
+            string barFile = _configManager.BarId == "main" ? "config.json" : $"bar_{_configManager.BarId}.json";
+            var src = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "LaunchDock", barFile);
             File.Copy(src, dlg.FileName, overwrite: true);
             WpfMessageBox.Show("Configuracion exportada correctamente.", "Exportar", MessageBoxButton.OK, MessageBoxImage.Information);
         }
@@ -117,7 +139,7 @@ public partial class SettingsWindow : Window
         {
             var dest = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "LaunchDock", "config.json");
             File.Copy(dlg.FileName, dest, overwrite: true);
-            ConfigManager.Load();
+            _configManager.LoadInstance();
             WpfMessageBox.Show("Configuracion importada. Reinicia LaunchDock para aplicar los cambios.", "Importar", MessageBoxButton.OK, MessageBoxImage.Information);
         }
         catch (Exception ex)
@@ -128,13 +150,14 @@ public partial class SettingsWindow : Window
 
     // TEMAS
 
-    private static readonly Dictionary<string, (string Bg, string Accent, string Text)> _themes = new()
+    private static readonly Dictionary<string, (string Bg, string Accent, string Text, string Popup)> _themes = new()
     {
-        ["Oscuro"]           = ("#CC1A1A2E", "#E94560", "#EAEAEA"),
-        ["Dracula"]          = ("#CC282A36", "#BD93F9", "#F8F8F2"),
-        ["Nord"]             = ("#CC2E3440", "#88C0D0", "#ECEFF4"),
-        ["Claro"]            = ("#F2F2F2F2", "#0078D4", "#1A1A1A"),
-        ["NeumorficoOscuro"] = ("#CC2D2D3A", "#7C83FD", "#D0D0E8"),
+        //                     Fondo barra       Acento      Texto       Fondo popup (= fondo barra)
+        ["Oscuro"]           = ("#CC1A1A2E", "#E94560", "#EAEAEA", "#CC1A1A2E"),
+        ["Dracula"]          = ("#CC282A36", "#BD93F9", "#F8F8F2", "#CC282A36"),
+        ["Nord"]             = ("#CC2E3440", "#88C0D0", "#ECEFF4", "#CC2E3440"),
+        ["Claro"]            = ("#F0F0F0F0", "#0078D4", "#1A1A1A", "#F0F0F0F0"),
+        ["NeumorficoOscuro"] = ("#CC2D2D3A", "#7C83FD", "#D0D0E8", "#CC2D2D3A"),
     };
 
     private void ThemePreset_Click(object sender, RoutedEventArgs e)
@@ -142,10 +165,11 @@ public partial class SettingsWindow : Window
         if (sender is not System.Windows.Controls.Button btn) return;
         string tag = btn.Tag?.ToString() ?? "";
         if (!_themes.TryGetValue(tag, out var t)) return;
-        BackgroundColorText.Text = t.Bg;
-        AccentColorText.Text     = t.Accent;
-        TextColorText.Text       = t.Text;
-        ConfigManager.Config.ThemeName = tag;
+        BackgroundColorText.Text  = t.Bg;
+        AccentColorText.Text      = t.Accent;
+        TextColorText.Text        = t.Text;
+        PopupMenuColorText.Text   = t.Popup;
+        Cfg.ThemeName = tag;
         HighlightActiveTheme(tag);
     }
 
@@ -158,10 +182,40 @@ public partial class SettingsWindow : Window
             btn.BorderBrush = active
                 ? new System.Windows.Media.SolidColorBrush(
                     (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(
-                        ConfigManager.Config.AccentColor))
+                        Cfg.AccentColor))
                 : new System.Windows.Media.SolidColorBrush(
                     System.Windows.Media.Color.FromRgb(0x44, 0x44, 0x66));
             btn.FontWeight = active ? FontWeights.Bold : FontWeights.Normal;
         }
+    }
+
+    private void CloseBar_Click(object sender, RoutedEventArgs e)
+    {
+        var result = WpfMessageBox.Show(
+            "Si se cierra esta barra no se podrá recuperar su configuración ni la barra.\n\n¿Deseas continuar?",
+            "Cerrar barra",
+            MessageBoxButton.OKCancel,
+            MessageBoxImage.Warning);
+
+        if (result != MessageBoxResult.OK) return;
+
+        DialogResult = false;
+        Close();
+
+        if (Owner is MainBarWindow bar)
+            bar.CloseThisBar();
+    }
+
+    private void ClipWindowToCornerRadius()
+    {
+        if (Content is not Border border) return;
+        double r = border.CornerRadius.TopLeft;
+        var geo = new System.Windows.Media.RectangleGeometry(
+            new System.Windows.Rect(0, 0, ActualWidth, ActualHeight), r, r);
+        border.Clip = geo;
+        SizeChanged += (s, e) =>
+        {
+            geo.Rect = new System.Windows.Rect(0, 0, ActualWidth, ActualHeight);
+        };
     }
 }
