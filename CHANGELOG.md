@@ -5,6 +5,15 @@ Formato: `[versión] — fecha`
 
 ---
 
+## [1.7.0] — 2025-07
+
+### 🐛 Bugs arreglados
+
+- **Soporte multiidioma (es, en, fr, it)**: los archivos de idioma XAML tenían el carácter de reemplazo Unicode `U+FFFD` (rombo con interrogante) en lugar de ñ, acentos y otros caracteres especiales. Corregida la codificación de los cuatro archivos (`es.xaml`, `en.xaml`, `fr.xaml`, `it.xaml`) a UTF-8 sin BOM con declaración `<?xml encoding="utf-8"?>`.
+- **Emojis en la ventana de Configuración aparecían como `??`**: al rescribir los archivos de idioma, los emojis fuera del BMP (📦 🗑️ 🧹 🎨 📤 📥…) se almacenaban como dos signos de interrogación ASCII. Sustituidos por XML character references (`&#x1F4E6;`, `&#x1F5D1;`, etc.) que son independientes de la codificación de la terminal y garantizan representación correcta en cualquier entorno.
+
+---
+
 ## [1.6.0] — 2025
 
 ### ✨ Nuevas funciones

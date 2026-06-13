@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!-- Meta -->
+    <sys:String x:Key="Lang.Name">Español</sys:String>
+
+    <!-- Barra principal - tooltips -->
+    <sys:String x:Key="Tooltip.SystemPanel">Panel del sistema</sys:String>
+    <sys:String x:Key="Tooltip.EditMode">Modo edición</sys:String>
+    <sys:String x:Key="Tooltip.Settings">Configuración</sys:String>
+    <sys:String x:Key="Tooltip.NewBar">Nueva barra</sys:String>
+    <sys:String x:Key="Tooltip.DragBar">Arrastrar barra</sys:String>
+
+    <!-- Modo edición -->
+    <sys:String x:Key="EditMode.Banner">&#x270F; MODO EDICIÓN  &#xB7;  Arrastra accesos directos aquí &#xB7; Haz clic en + para añadir categorías</sys:String>
+    <sys:String x:Key="EditMode.Save">&#x1F4BE; GUARDAR</sys:String>
+    <sys:String x:Key="EditMode.AddCategory">&#x2795; Categoría</sys:String>
+
+    <!-- Panel del sistema -->
+    <sys:String x:Key="System.ControlPanel">&#x1F5A5;&#xFE0F;  Panel de control</sys:String>
+    <sys:String x:Key="System.Run">&#x26A1;  Ejecutar</sys:String>
+    <sys:String x:Key="System.Search">&#x1F50D;  Buscar</sys:String>
+    <sys:String x:Key="System.Settings">&#x2699;&#xFE0F;  Configuración</sys:String>
+    <sys:String x:Key="System.TaskManager">&#x1F4CA;  Adm. de tareas</sys:String>
+    <sys:String x:Key="System.Services">&#x1F527;  Servicios</sys:String>
+    <sys:String x:Key="System.CMD">&#x1F4BB;  CMD</sys:String>
+    <sys:String x:Key="System.PowerShell">&#x1F4BB;  PowerShell</sys:String>
+    <sys:String x:Key="System.Shutdown">&#x1F534;  Apagar</sys:String>
+    <sys:String x:Key="System.Restart">&#x1F501;  Reiniciar</sys:String>
+    <sys:String x:Key="System.Suspend">&#x1F4A4;  Suspender</sys:String>
+
+    <!-- Categorías -->
+    <sys:String x:Key="Category.Delete.Confirm">&#xBF;Eliminar la categoría &#xAB;{0}&#xBB;?</sys:String>
+    <sys:String x:Key="Category.Delete.Title">Confirmar</sys:String>
+    <sys:String x:Key="Category.NewName">NUEVA</sys:String>
+    <sys:String x:Key="Category.Tooltip.Delete">Eliminar categoría</sys:String>
+    <sys:String x:Key="Category.Tooltip.MoveLeft">Mover izquierda</sys:String>
+    <sys:String x:Key="Category.Tooltip.MoveRight">Mover derecha</sys:String>
+
+    <!-- Accesos directos - menú contextual -->
+    <sys:String x:Key="Shortcut.Menu.Delete">&#x1F5D1;&#xFE0F; Eliminar acceso directo</sys:String>
+    <sys:String x:Key="Shortcut.Menu.MoveUp">&#x2B06; Mover arriba</sys:String>
+    <sys:String x:Key="Shortcut.Menu.MoveDown">&#x2B07; Mover abajo</sys:String>
+    <sys:String x:Key="Shortcut.Error.Title">Error</sys:String>
+    <sys:String x:Key="Shortcut.Error.Message">No se pudo abrir: {0}</sys:String>
+
+    <!-- Configuración - título y secciones -->
+    <sys:String x:Key="Settings.Title">Configuración</sys:String>
+    <sys:String x:Key="Settings.Section.Position">POSICIÓN DE LA BARRA</sys:String>
+    <sys:String x:Key="Settings.Position.Top">Arriba (Top)</sys:String>
+    <sys:String x:Key="Settings.Position.Bottom">Abajo (Bottom)</sys:String>
+    <sys:String x:Key="Settings.Position.Left">Izquierda (Left)</sys:String>
+    <sys:String x:Key="Settings.Position.Right">Derecha (Right)</sys:String>
+    <sys:String x:Key="Settings.Position.Floating">Flotante (mover libremente)</sys:String>
+    <sys:String x:Key="Settings.AutoHide">  Auto-ocultar (la barra se esconde al mover el ratón fuera)</sys:String>
+    <sys:String x:Key="Settings.Section.Orientation">ORIENTACIÓN</sys:String>
+    <sys:String x:Key="Settings.Orientation.Horizontal">Horizontal</sys:String>
+    <sys:String x:Key="Settings.Orientation.Vertical">Vertical</sys:String>
+    <sys:String x:Key="Settings.Section.IconSize">TAMAÑO DE ICONOS</sys:String>
+    <sys:String x:Key="Settings.IconSize.Small">16px (pequeño)</sys:String>
+    <sys:String x:Key="Settings.IconSize.Medium">32px (mediano)</sys:String>
+    <sys:String x:Key="Settings.IconSize.Large">48px (grande)</sys:String>
+    <sys:String x:Key="Settings.Section.Customization">&#x1F3A8; PERSONALIZACIÓN</sys:String>
+    <sys:String x:Key="Settings.Section.Theme">TEMA</sys:String>
+    <sys:String x:Key="Settings.Section.Colors">COLORES</sys:String>
+    <sys:String x:Key="Settings.Color.Background">Color de fondo</sys:String>
+    <sys:String x:Key="Settings.Color.Accent">Color de acento</sys:String>
+    <sys:String x:Key="Settings.Color.Text">Color de texto</sys:String>
+    <sys:String x:Key="Settings.Color.Popup">Color fondo menú desplegable</sys:String>
+    <sys:String x:Key="Settings.Section.Font">FUENTE</sys:String>
+    <sys:String x:Key="Settings.Font.Family">Familia de fuente</sys:String>
+    <sys:String x:Key="Settings.Font.Size">Tamaño de fuente</sys:String>
+    <sys:String x:Key="Settings.Font.CornerRadius">Radio de esquinas</sys:String>
+    <sys:String x:Key="Settings.Section.Transparency">TRANSPARENCIA</sys:String>
+    <sys:String x:Key="Settings.Opacity">Opacidad</sys:String>
+    <sys:String x:Key="Settings.Section.Language">IDIOMA</sys:String>
+    <sys:String x:Key="Settings.Language.Restart">Reinicia LaunchDock para aplicar el idioma.</sys:String>
+    <sys:String x:Key="Settings.Backup.Title">&#x1F4E6; Copia de seguridad</sys:String>
+    <sys:String x:Key="Settings.Backup.Subtitle">Exporta o importa tu configuración completa</sys:String>
+    <sys:String x:Key="Settings.Backup.Export">&#x1F4E4; Exportar</sys:String>
+    <sys:String x:Key="Settings.Backup.Import">&#x1F4E5; Importar</sys:String>
+    <sys:String x:Key="Settings.Cache.Title">&#x1F5D1;&#xFE0F; Caché de iconos</sys:String>
+    <sys:String x:Key="Settings.Cache.Subtitle">Regenera iconos si alguno se ve con fondo negro o incorrecto</sys:String>
+    <sys:String x:Key="Settings.Cache.Clear">&#x1F9F9; Limpiar</sys:String>
+    <sys:String x:Key="Settings.Cache.Empty">La cache ya estaba vacia.</sys:String>
+    <sys:String x:Key="Settings.Cache.Cleared">{0} iconos eliminados.</sys:String>
+    <sys:String x:Key="Settings.Cache.ClearedBtn">Limpiado</sys:String>
+    <sys:String x:Key="Settings.CloseBar">&#x1F5D1;&#xFE0F; Cerrar esta barra</sys:String>
+    <sys:String x:Key="Settings.CloseBar.Confirm">Si se cierra esta barra no se podrá recuperar su configuración ni la barra.&#x0a;&#x0a;&#xBF;Deseas continuar?</sys:String>
+    <sys:String x:Key="Settings.CloseBar.Title">Cerrar barra</sys:String>
+    <sys:String x:Key="Settings.Cancel">Cancelar</sys:String>
+    <sys:String x:Key="Settings.Save">Guardar</sys:String>
+
+    <!-- Backup/Restore mensajes -->
+    <sys:String x:Key="Backup.Export.Success">Configuracion exportada correctamente.</sys:String>
+    <sys:String x:Key="Backup.Export.Title">Exportar</sys:String>
+    <sys:String x:Key="Backup.Export.Error">Error al exportar: {0}</sys:String>
+    <sys:String x:Key="Backup.Import.Confirm">Se reemplazara la configuracion actual. Continuar?</sys:String>
+    <sys:String x:Key="Backup.Import.Title">Importar</sys:String>
+    <sys:String x:Key="Backup.Import.Success">Configuracion importada. Reinicia LaunchDock para aplicar los cambios.</sys:String>
+    <sys:String x:Key="Backup.Import.Error">Error al importar: {0}</sys:String>
+
+    <!-- Tray -->
+    <sys:String x:Key="Tray.Settings">&#x2699; Configuración</sys:String>
+    <sys:String x:Key="Tray.EditMode">&#x270F; Modo Edición</sys:String>
+    <sys:String x:Key="Tray.Exit">&#x274C; Cerrar LaunchDock</sys:String>
+
+</ResourceDictionary>

@@ -16,7 +16,7 @@ Próximos Cambios y Mejoras a implementar:
 2. ~~Posibilidad de varios Docks a la vez (Multi-instancia).~~ ✅ Implementado en v1.6.0
 3. Posibilidad de minimizar/ocultar la barra en un pequeño icono minimalista
 4. ~~Añadir panel estrecho al dock con accesos del sistema~~ ✅ Implementado en v1.5.0
-5. Multilenguaje
+5. ~~Multilenguaje~~ ✅ Implementado en v1.7.0
 6. ~~Temas visuales~~ ✅ Implementado en v1.3.0
 
 ---
@@ -57,6 +57,7 @@ https://github.com/jlacaci/LaunchDock/releases/latest
 - **Color fondo menú desplegable** configurable por barra
 - **Esquinas redondeadas transparentes** en menús y ventana de configuración
 - **Botones de acción adaptativos** según orientación horizontal/vertical
+- **Soporte multiidioma**: Español, English, Français, Italiano (cambiable desde Configuración)
 - Color de acento, fondo y texto totalmente personalizables
 - Configuración persistente en `%AppData%`
 - Compatible con múltiples monitores y DPI-aware
@@ -90,7 +91,7 @@ https://github.com/jlacaci/LaunchDock/releases/latest
 Consulta el historial completo en:  
 👉 [`CHANGELOG.md`](CHANGELOG.md)
 
-Última versión publicada: **1.6.0**
+Última versión publicada: **1.7.0**
 
 ---
 
