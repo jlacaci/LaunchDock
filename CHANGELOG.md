@@ -14,7 +14,7 @@ Formato: `[versión] — fecha`
 
 ---
 
-## [1.7.0] — 2026-10-16
+## [1.7.0] — 2026-06-13
 
 ### 🐛 Bugs arreglados
 
@@ -23,7 +23,7 @@ Formato: `[versión] — fecha`
 
 ---
 
-## [1.6.0] — 2025
+## [1.6.0] — 2026-06-07
 
 ### ✨ Nuevas funciones
 
@@ -40,7 +40,7 @@ Formato: `[versión] — fecha`
 
 ---
 
-## [1.5.2] — 2025
+## [1.5.2] — 2026-06-01
 
 ### 🐛 Bugs arreglados / Mejoras visuales
 
@@ -48,7 +48,7 @@ Formato: `[versión] — fecha`
 
 ---
 
-## [1.5.1] — 2025
+## [1.5.1] — 2026-06-01
 
 ### 🐛 Bugs arreglados
 
@@ -56,7 +56,7 @@ Formato: `[versión] — fecha`
 
 ---
 
-## [1.5.0] — 2025
+## [1.5.0] — 2026-06-01
 
 ### 🐛 Bugs arreglados
 
@@ -73,19 +73,19 @@ Formato: `[versión] — fecha`
 
 ---
 
-## [1.4.0] — 2025
+## [1.4.0] — 2026-05-30
 
 ### ✨ Mejoras
 
-- **Backup / Restore de configuraci
-  - `?? Exportar` — guarda el `config.json` completo (categorías, accesos directos, colores, fuente, posición…) en la ruta que elija el usuario.
-  - `?? Importar` — carga un `config.json` previamente exportado y lo aplica al reiniciar LaunchDock. Incluye confirmación antes de sobreescribir.
+- **Backup / Restore de configuración**: nueva sección en Configuración para exportar e importar toda la configuración en un archivo `.json`:
+  - `📤 Exportar` — guarda el `config.json` completo (categorías, accesos directos, colores, fuente, posición…) en la ruta que elija el usuario.
+  - `📥 Importar` — carga un `config.json` previamente exportado y lo aplica al reiniciar LaunchDock. Incluye confirmación antes de sobreescribir.
 
 ---
 
+## [1.3.0] — 2026-05-30
 
-
-### ? Mejoras
+### ✨ Mejoras
 
 - **5 temas de color predefinidos**: nueva sección TEMA en Configuración con botones de preset. Los temas disponibles son `Oscuro` (el clásico), `Drácula` (púrpura), `Nord` (azules fríos), `Claro` (fondo blanco) y `Neumórfico Oscuro` (violeta suave). Al seleccionar un tema se rellenan automáticamente los 3 campos de color; el usuario puede seguir ajustándolos manualmente.
 - **Radio de esquinas configurable**: nuevo slider en Configuración (0–20 px). El radio se aplica inteligentemente según la posición de la barra: las esquinas pegadas al borde del monitor siempre quedan en 0 y solo se redondean las esquinas libres.
@@ -93,50 +93,50 @@ Formato: `[versión] — fecha`
 
 ---
 
+## [1.2.1] — 2026-05-25
 
-
-### ?? Bugs arreglados
+### 🐛 Bugs arreglados
 
 - **Script de publicación se detenía si LaunchDock no estaba en ejecución**: `taskkill` devolvía error y `$ErrorActionPreference = "Stop"` abortaba el script antes de compilar. Reemplazado por `Stop-Process -ErrorAction SilentlyContinue`.
 - **Versión del instalador siempre mostraba 1.0.0**: el parámetro `$Version` del script tenía `"1.0.0"` hardcodeado. Ahora se lee automáticamente del `<Version>` en `LaunchDock.csproj`.
 - **Instaladores antiguos acumulados en `publish\Installer\`**: el script ahora borra los `.exe` anteriores antes de generar el nuevo.
 
-### ? Mejoras
+### ✨ Mejoras
 
 - **Categorías por defecto en instalación nueva**: los usuarios que instalan LaunchDock por primera vez ven 5 categorías de ejemplo: `OFIMÁTICA`, `INTERNET`, `FOTOGRAFÍA`, `VIDEO`, `AUDIO`.
 - **Color de acento aplica a la línea de hover**: la línea de color que aparece al pasar el ratón sobre una categoría ahora respeta el color de acento configurado por el usuario en tiempo real (`DynamicResource`).
 
 ---
 
+## [1.2.0] — 2025
 
-
-### ?? Bugs arreglados
+### 🐛 Bugs arreglados
 
 - **Error catastrófico al añadir accesos directos UWP/Store**: al pulsar `+ Añadir acceso directo` y seleccionar un `.lnk` de apps como Clipchamp, el `OpenFileDialog` de WPF intentaba resolver el enlace automáticamente y el shell lanzaba `E_UNEXPECTED`. Reemplazado por el `OpenFileDialog` de WinForms con `DereferenceLinks = false`.
 
-### ? Mejoras
+### ✨ Mejoras
 
-- **Botón ? Modo edición en la barra**: añadido botón de lápiz junto al de configuración (?) para activar/desactivar el modo edición sin necesidad de menú contextual.
+- **Botón ✏ Modo edición en la barra**: añadido botón de lápiz junto al de configuración (⚙) para activar/desactivar el modo edición sin necesidad de menú contextual.
 - **Modo edición limitado al ancho del monitor**: al activar el modo edición la ventana nunca se desborda fuera de los límites del monitor. Compatible con configuraciones multi-monitor gracias a detección DPI-aware con `Screen.FromPoint()`.
-- **Tabs compactos en modo edición**: los botones de categoría se reducen (padding, fuente y tamaño de botones ???) al entrar en modo edición para maximizar el número de categorías visibles sin scroll.
+- **Tabs compactos en modo edición**: los botones de categoría se reducen (padding, fuente y tamaño de botones ✏ ⚙ ＋) al entrar en modo edición para maximizar el número de categorías visibles sin scroll.
 
 ---
 
+## [1.1.0] — 2025
 
-
-### ?? Bugs arreglados
+### 🐛 Bugs arreglados
 
 - **Iconos con flecha de acceso directo**: los iconos extraídos de accesos directos `.lnk` ya no muestran la flecha de overlay de Windows.
 - **Fusion 360 icono incorrecto**: mostraba el icono de `FusionLauncher.exe` (cohete) en lugar del icono naranja con "F". Ahora se prioriza el icono personalizado definido en el `.lnk`.
 - **Copilot icono con fondo negro**: al extraer el icono de apps UWP/Store, el fondo aparecía negro. Corregido leyendo el canal alpha premultiplicado (PARGB) directamente con `GetDIBits`.
 - **Copilot icono con flecha**: las apps UWP no tienen `.exe` accesible, por lo que los métodos clásicos fallaban. Implementado `IShellItemImageFactory` con flag `SIIGBF_ICONONLY` para extraer sin overlay.
 - **Menú contextual "Eliminar" no funcionaba**: el `MessageBox` de confirmación aparecía oculto detrás de otras ventanas en apps de bandeja del sistema. Eliminado el diálogo de confirmación, ahora elimina directamente.
-- **Modo edición cortado a la derecha**: al tener muchas categorías, el botón `? Categoría` quedaba fuera de pantalla. Rediseñado el layout con `Grid` + `ScrollViewer` horizontal para que los botones de acción siempre sean visibles.
+- **Modo edición cortado a la derecha**: al tener muchas categorías, el botón `➕ Categoría` quedaba fuera de pantalla. Rediseñado el layout con `Grid` + `ScrollViewer` horizontal para que los botones de acción siempre sean visibles.
 - **Cambio de orientación no se revertía correctamente**: al pasar de vertical a horizontal, la ventana mantenía el ancho estrecho del modo vertical. Corregido reseteando `Width` antes de que `PositionWindow` recalcule.
 - **Script de publicación no incluía últimos cambios**: `dotnet publish` usaba artefactos en caché de `obj\`. Añadido `dotnet clean` antes de publicar.
 - **Instalador Inno Setup no generaba el `.exe`**: la variable `{#MyAppExeName}` dentro de un `#define` no se expandía. Corregida la referencia directamente en la sección `[Files]`.
 
-### ? Mejoras
+### ✨ Mejoras
 
 - **Caché de iconos**: sistema de caché PNG en `%AppData%\LaunchDock\IconCache\` para guardar iconos sin flecha y reutilizarlos en arranques posteriores.
 - **Botón "Limpiar caché" en Configuración**: permite regenerar todos los iconos desde la ventana de ajustes sin tocar archivos manualmente.
@@ -147,7 +147,7 @@ Formato: `[versión] — fecha`
 
 ## [1.0.0] — 2025
 
-### ?? Lanzamiento inicial
+### 🚀 Lanzamiento inicial
 
 - Barra de lanzamiento rápido personalizable para Windows.
 - Soporte para categorías con accesos directos.
