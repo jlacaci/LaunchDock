@@ -59,9 +59,6 @@ Filename: "{app}\{#MyAppExeName}"; \
 ; Cerrar el proceso antes de desinstalar
 Filename: "taskkill.exe"; Parameters: "/F /IM {#MyAppExeName}"; RunOnceId: "KillApp"; Flags: runhidden
 
-[UninstallDelete]
-Type: filesandordirs; Name: "{userappdata}\LaunchDock"
-
 [Code]
 // Cierra LaunchDock si está corriendo antes de instalar/actualizar
 procedure CloseRunningApp();
