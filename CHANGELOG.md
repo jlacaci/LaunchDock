@@ -5,6 +5,14 @@ Formato: `[versión] — fecha`
 
 ---
 
+## [1.7.2] — 2026-10-16
+
+### 🐛 Bugs arreglados
+
+- **Ventana de Configuración sin textos tras instalar**: el instalador solo incluía `LaunchDock.exe` y no la carpeta `Language\` con los archivos de idioma, por lo que la aplicación instalada mostraba la ventana de Configuración vacía (sin títulos ni etiquetas) y el selector de idioma sin opciones. El instalador ahora copia `Language\*.xaml` a `{app}\Language`. Desde Visual Studio funcionaba porque los idiomas se copian junto al ejecutable de compilación.
+
+---
+
 ## [1.7.1] — 2026-10-16
 
 ### ✨ Mejoras

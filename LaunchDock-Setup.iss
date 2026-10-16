@@ -2,7 +2,7 @@
 ; Requiere Inno Setup 6+ ? https://jrsoftware.org/isinfo.php
 
 #define MyAppName      "LaunchDock"
-#define MyAppVersion   "1.7.1"
+#define MyAppVersion   "1.7.2"
 #define MyAppPublisher "Jorge Lacaci"
 #define MyAppExeName   "LaunchDock.exe"
 
@@ -42,6 +42,7 @@ Name: "startupicon";  Description: "Iniciar LaunchDock con Windows";         Gro
 
 [Files]
 Source: ".\publish\win-x64\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: ".\publish\win-x64\Language\*"; DestDir: "{app}\Language"; Flags: ignoreversion recursesubdirs
 
 [Icons]
 Name: "{group}\{#MyAppName}";                        Filename: "{app}\{#MyAppExeName}"
