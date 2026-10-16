@@ -5,6 +5,14 @@ Formato: `[versión] — fecha`
 
 ---
 
+## [1.7.4] — 2026-10-16
+
+### 🐛 Bugs arreglados
+
+- **Desmarcar Auto-ocultar no dejaba la barra fija**: al desactivar la opción, los manejadores del ratón y el temporizador de la activación anterior seguían ocultando la barra. Ahora se retiran al guardar la configuración y ya no se acumulan duplicados.
+
+---
+
 ## [1.7.3] — 2026-10-16
 
 ### 🐛 Bugs arreglados

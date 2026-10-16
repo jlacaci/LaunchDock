@@ -445,16 +445,24 @@ public partial class MainBarWindow : Window
             prevTt.BeginAnimation(TranslateTransform.YProperty, null);
         _isHidden = false;
 
+        MouseEnter -= AutoHide_MouseEnter;
+        MouseLeave -= AutoHide_MouseLeave;
+        _hideTimer?.Stop();
+        _hideTimer = null;
+
         if (!Cfg.AutoHide) return;
 
-        MouseEnter += (s, e) => ShowBar();
-        MouseLeave += (s, e) => StartHideTimer();
+        MouseEnter += AutoHide_MouseEnter;
+        MouseLeave += AutoHide_MouseLeave;
 
         _hideTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
         _hideTimer.Tick += (s, e) => { _hideTimer.Stop(); HideBar(); };
 
         Dispatcher.InvokeAsync(HideBar, DispatcherPriority.Loaded);
     }
+
+    private void AutoHide_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e) => ShowBar();
+    private void AutoHide_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e) => StartHideTimer();
 
     private void ShowBar()
     {

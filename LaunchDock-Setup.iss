@@ -2,7 +2,7 @@
 ; Requiere Inno Setup 6+ ? https://jrsoftware.org/isinfo.php
 
 #define MyAppName      "LaunchDock"
-#define MyAppVersion   "1.7.3"
+#define MyAppVersion   "1.7.4"
 #define MyAppPublisher "Jorge Lacaci"
 #define MyAppExeName   "LaunchDock.exe"
 
