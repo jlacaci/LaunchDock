@@ -87,29 +87,42 @@
                     <!-- Categories row -->
                     <Grid x:Name="CategoriesPanel" Grid.Row="1" MinHeight="42">
                         <Grid.RowDefinitions>
+                            <!-- Tirador superior (solo modo vertical) -->
+                            <RowDefinition x:Name="DragRowTop" Height="0"/>
+                            <!-- Categorías -->
                             <RowDefinition Height="Auto"/>
                             <!-- Botones de acción en modo vertical (debajo de categorías) -->
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
-                            <!-- Drag handle -->
-                            <ColumnDefinition Width="36"/>
+                            <!-- Drag handle (solo modo horizontal) -->
+                            <ColumnDefinition x:Name="DragColLeft" Width="36"/>
                             <!-- Categorías con scroll -->
                             <ColumnDefinition Width="*"/>
                             <!-- Botones fijos horizontal: + Categoría, Guardar, ⚙ -->
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
-                        <!-- Drag handle / Logo -->
-                        <Border Grid.Column="0" Background="Transparent" Cursor="SizeAll"
+                        <!-- Tirador horizontal (columna izquierda, solo modo horizontal) -->
+                        <Border x:Name="DragHandleH" Grid.Row="1" Grid.Column="0"
+                                Background="Transparent" Cursor="SizeAll"
                                 ToolTip="Arrastrar barra"
                                 MouseLeftButtonDown="DragHandle_MouseLeftButtonDown">
                             <TextBlock Text="⠿" Foreground="#555577" FontSize="18"
                                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
 
+                        <!-- Tirador vertical (fila superior, centrado, solo modo vertical) -->
+                        <Border x:Name="DragHandleV" Grid.Row="0" Grid.ColumnSpan="3"
+                                Background="Transparent" Cursor="SizeAll"
+                                ToolTip="Arrastrar barra" Visibility="Collapsed"
+                                MouseLeftButtonDown="DragHandle_MouseLeftButtonDown">
+                            <TextBlock Text="⠿" Foreground="#555577" FontSize="14"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+
                         <!-- Scroll horizontal para las categorías -->
-                        <ScrollViewer Grid.Column="1"
+                        <ScrollViewer Grid.Row="1" Grid.Column="1"
                                       HorizontalScrollBarVisibility="Hidden"
                                       VerticalScrollBarVisibility="Disabled"
                                       VerticalAlignment="Stretch">
@@ -124,7 +137,7 @@
                         </ScrollViewer>
 
                         <!-- Botones fijos: siempre visibles, no se desplazan -->
-                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                        <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
 
                             <!-- Add Category button (edit mode) -->
                             <Button x:Name="AddCategoryBtn"
@@ -224,7 +237,7 @@
 
                         <!-- Botones de acción en modo VERTICAL (debajo de categorías) -->
                         <StackPanel x:Name="VerticalActionButtons"
-                                    Grid.Row="1" Grid.ColumnSpan="3"
+                                    Grid.Row="2" Grid.ColumnSpan="3"
                                     Orientation="Horizontal"
                                     HorizontalAlignment="Center"
                                     Visibility="Collapsed"

@@ -171,6 +171,11 @@ public partial class MainBarWindow : Window
 
         if (isVertical)
         {
+            // Tirador arriba, columna izquierda eliminada
+            DragHandleH.Visibility = Visibility.Collapsed;
+            DragHandleV.Visibility = Visibility.Visible;
+            DragRowTop.Height      = new GridLength(24);
+            DragColLeft.Width      = new GridLength(0);
             EditModeBtn.Visibility           = Visibility.Collapsed;
             SettingsBtn.Visibility           = Visibility.Collapsed;
             AddBarBtn.Visibility             = Visibility.Collapsed;
@@ -182,6 +187,11 @@ public partial class MainBarWindow : Window
         }
         else
         {
+            // Tirador izquierda, fila superior eliminada
+            DragHandleH.Visibility = Visibility.Visible;
+            DragHandleV.Visibility = Visibility.Collapsed;
+            DragRowTop.Height      = new GridLength(0);
+            DragColLeft.Width      = new GridLength(36);
             VerticalActionButtons.Visibility = Visibility.Collapsed;
             EditModeBtn.Visibility           = Visibility.Visible;
             SettingsBtn.Visibility           = Visibility.Visible;

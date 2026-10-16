@@ -10,6 +10,7 @@ Formato: `[versión] — fecha`
 ### ✨ Mejoras
 
 - **Multiidioma completo**: la ventana de Configuración, el menú de bandeja y el resto de textos usan los recursos de `Language/*.xaml`. Nuevo selector de idioma en Configuración; el idioma elegido se guarda y se recuerda al reiniciar (`AppConfig.Language`). Si no hay idioma guardado se detecta el del sistema.
+- **Tirador vertical de la barra**: en orientación vertical el tirador de arrastre pasa a una fila superior centrada; en horizontal se mantiene en la columna izquierda.
 
 ---
 
