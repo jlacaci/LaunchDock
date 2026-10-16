@@ -10,6 +10,7 @@ Formato: `[versión] — fecha`
 ### ✨ Mejoras
 
 - **Multiidioma completo**: la ventana de Configuración, el menú de bandeja y el resto de textos usan los recursos de `Language/*.xaml`. Nuevo selector de idioma en Configuración; el idioma elegido se guarda y se recuerda al reiniciar (`AppConfig.Language`). Si no hay idioma guardado se detecta el del sistema.
+- **Auto-ocultar documentado**: la barra puede esconderse dejando una línea fina de 4 px en el borde y reaparece al pasar el ratón por encima (Configuración → Auto-ocultar). La función existía desde el inicio del proyecto; ahora figura en el README y en este changelog.
 - **Tirador vertical de la barra**: en orientación vertical el tirador de arrastre pasa a una fila superior centrada; en horizontal se mantiene en la columna izquierda.
 
 ---

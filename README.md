@@ -15,7 +15,7 @@ Próximos Cambios y Mejoras a implementar:
 
 1. ~~Posibilidad de guardar la configuracion en archivo json (Backup/Restore).~~ ✅ Implementado en v1.4.0
 2. ~~Posibilidad de varios Docks a la vez (Multi-instancia).~~ ✅ Implementado en v1.6.0
-3. Posibilidad de minimizar/ocultar la barra en un pequeño icono minimalista
+3. ~~Posibilidad de minimizar/ocultar la barra en una linea fina~~ ✅ Implementado en v1.7.1
 4. ~~Añadir panel estrecho al dock con accesos del sistema~~ ✅ Implementado en v1.5.0
 5. ~~Multilenguaje~~ ✅ Implementado en v1.7.0
 6. ~~Temas visuales~~ ✅ Implementado en v1.3.0
@@ -43,6 +43,7 @@ https://github.com/jlacaci/LaunchDock/releases/latest
 ## ✨ Características principales
 
 - Dock flotante siempre visible
+- **Auto-ocultar**: la barra se esconde dejando solo una línea fina en el borde y reaparece al pasar el ratón (Configuración → Auto-ocultar)
 - Categorías personalizables (Ofimática, Internet, Foto, Vídeo, Audio…)
 - Animaciones suaves y diseño moderno
 - Iconos personalizados sin flecha de acceso directo
