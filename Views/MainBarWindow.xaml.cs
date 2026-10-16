@@ -80,6 +80,13 @@ public partial class MainBarWindow : Window
     {
         var cfg = Cfg;
 
+        // Las animaciones de auto-ocultar retienen el valor y bloquean Left/Top/Width: soltarlas
+        BeginAnimation(TopProperty, null);
+        BeginAnimation(LeftProperty, null);
+        BeginAnimation(WidthProperty, null);
+        _isHidden = false;
+        Opacity = cfg.Opacity / 100.0;
+
         // Apply orientation (forzar vertical si es Left o Right)
         var effectiveOrientation = (cfg.Position == "Left" || cfg.Position == "Right") 
             ? "Vertical" 
@@ -202,6 +209,12 @@ public partial class MainBarWindow : Window
         foreach (var ctrl in _categoryControls)
             ctrl.SetOrientation(orientation);
 
+        var catScroll = FindScrollViewer(CategoriesItemsControl);
+        if (catScroll != null)
+        {
+            catScroll.VerticalScrollBarVisibility   = isVertical ? ScrollBarVisibility.Auto : ScrollBarVisibility.Disabled;
+            catScroll.HorizontalScrollBarVisibility = isVertical ? ScrollBarVisibility.Disabled : ScrollBarVisibility.Hidden;
+        }
         // Forzar actualización del layout
         UpdateLayout();
         InvalidateMeasure();
@@ -211,6 +224,7 @@ public partial class MainBarWindow : Window
     private void PositionWindow(string position, double floatX, double floatY)
     {
         var screen = System.Windows.SystemParameters.WorkArea;
+        MinHeight = 0;
         var orientation = Cfg.Orientation ?? "Horizontal";
 
         switch (position)
@@ -253,15 +267,17 @@ public partial class MainBarWindow : Window
             case "Left":
                 // Siempre vertical para izquierda
                 Left = 0;
-                Top = 0;
-                Height = screen.Height;
+                Top = screen.Top;
+                MinHeight = screen.Height;
                 SizeToContent = SizeToContent.Width;
+                Height = screen.Height;
                 break;
             case "Right":
                 // Siempre vertical para derecha
-                Top = 0;
-                Height = screen.Height;
+                Top = screen.Top;
+                MinHeight = screen.Height;
                 SizeToContent = SizeToContent.Width;
+                Height = screen.Height;
                 Dispatcher.InvokeAsync(() =>
                 {
                     Left = screen.Right - ActualWidth;
@@ -377,7 +393,7 @@ public partial class MainBarWindow : Window
     /// Devuelve el WorkArea del monitor en el que está actualmente la ventana.
     /// Usa WinForms Screen para soporte multi-monitor.
     /// </summary>
-    private System.Windows.Rect GetCurrentMonitorWorkArea()
+    private System.Windows.Rect GetCurrentMonitorWorkArea(bool fullBounds = false)
     {
         // Convertir posición WPF (DIPs) a píxeles para WinForms
         var source = PresentationSource.FromVisual(this);
@@ -392,7 +408,7 @@ public partial class MainBarWindow : Window
         int cy = (int)((Top + ActualHeight / 2) * dpiY);
 
         var screen = System.Windows.Forms.Screen.FromPoint(new System.Drawing.Point(cx, cy));
-        var wa = screen.WorkingArea;
+        var wa = fullBounds ? screen.Bounds : screen.WorkingArea;
 
         // Devolver en DIPs
         return new System.Windows.Rect(
@@ -412,8 +428,23 @@ public partial class MainBarWindow : Window
 
     // ─── AUTO HIDE ────────────────────────────────────────────────────────────
 
+    private System.Windows.Rect _monWa = SystemParameters.WorkArea;
+    private System.Windows.Rect _monBounds = new(0, 0, SystemParameters.PrimaryScreenWidth, SystemParameters.PrimaryScreenHeight);
+    private double _shownWidth;
+
     private void SetupAutoHide()
     {
+        // Con auto-ocultar la barra debe quedar siempre accesible por encima de otras ventanas
+        Topmost = Cfg.AutoHide;
+
+        // Limpiar estado de una ocultación anterior (animaciones retenidas)
+        BeginAnimation(TopProperty, null);
+        BeginAnimation(LeftProperty, null);
+        BeginAnimation(WidthProperty, null);
+        if (RenderTransform is TranslateTransform prevTt)
+            prevTt.BeginAnimation(TranslateTransform.YProperty, null);
+        _isHidden = false;
+
         if (!Cfg.AutoHide) return;
 
         MouseEnter += (s, e) => ShowBar();
@@ -431,6 +462,33 @@ public partial class MainBarWindow : Window
         if (!_isHidden) return;
         _isHidden = false;
 
+        if (Cfg.Position is "Left" or "Right")
+        {
+            var w = _shownWidth;
+            var wAnim = new DoubleAnimation(w, TimeSpan.FromMilliseconds(180));
+            wAnim.Completed += (s, e) =>
+            {
+                if (_isHidden) return;
+                BeginAnimation(WidthProperty, null);
+                BeginAnimation(LeftProperty, null);
+                Width = w;
+                SizeToContent = SizeToContent.Width;
+                Left = Cfg.Position == "Right" ? _monWa.Right - w : _monWa.Left;
+            };
+            BeginAnimation(WidthProperty, wAnim);
+            if (Cfg.Position == "Right")
+                BeginAnimation(LeftProperty, new DoubleAnimation(_monWa.Right - w, TimeSpan.FromMilliseconds(180)));
+            Opacity = 1;
+            return;
+        }
+
+        if (TryGetHideTargets(out var prop, out var shown, out _))
+        {
+            BeginAnimation(prop!, new DoubleAnimation(shown, TimeSpan.FromMilliseconds(180)));
+            Opacity = 1;
+            return;
+        }
+
         var anim = new DoubleAnimation(0, TimeSpan.FromMilliseconds(180));
         var tt = (TranslateTransform)RenderTransform;
         tt.BeginAnimation(TranslateTransform.YProperty, anim);
@@ -441,14 +499,57 @@ public partial class MainBarWindow : Window
     {
         if (_isHidden) return;
         _isHidden = true;
+        _monWa = GetCurrentMonitorWorkArea();
+        _monBounds = GetCurrentMonitorWorkArea(true);
 
-        double offset = Cfg.Position == "Top" ? -(ActualHeight - 4) : (ActualHeight - 4);
+        if (Cfg.Position is "Left" or "Right")
+        {
+            _shownWidth = ActualWidth;
+            SizeToContent = SizeToContent.Manual;
+            Width = _shownWidth;
+            BeginAnimation(WidthProperty, new DoubleAnimation(4, TimeSpan.FromMilliseconds(250)));
+            if (Cfg.Position == "Right")
+                BeginAnimation(LeftProperty, new DoubleAnimation(_monBounds.Right - 4, TimeSpan.FromMilliseconds(250)));
+            return;
+        }
+
+        // En Top/Bottom/Left/Right se mueve la ventana fuera de pantalla: solo quedan 4 px
+        // visibles y la zona transparente no interfiere con los menús de otros programas
+        if (TryGetHideTargets(out var prop, out _, out var hidden))
+        {
+            BeginAnimation(prop!, new DoubleAnimation(hidden, TimeSpan.FromMilliseconds(250)));
+            return;
+        }
+
+        double offset = ActualHeight - 4;
 
         if (RenderTransform is not TranslateTransform)
             RenderTransform = new TranslateTransform();
 
         var anim = new DoubleAnimation(offset, TimeSpan.FromMilliseconds(250));
         ((TranslateTransform)RenderTransform).BeginAnimation(TranslateTransform.YProperty, anim);
+    }
+
+    /// <summary>
+    /// Devuelve la propiedad (Left/Top) y los valores visible/oculto según la posición de la barra.
+    /// Devuelve false en Floating, que usa el desplazamiento del contenido.
+    /// </summary>
+    private bool TryGetHideTargets(out DependencyProperty? prop, out double shown, out double hidden)
+    {
+        var wa = _monWa;
+        switch (Cfg.Position)
+        {
+            case "Top":
+                prop = TopProperty; shown = wa.Top; hidden = wa.Top - (ActualHeight - 4); return true;
+            case "Bottom":
+                prop = TopProperty; shown = wa.Bottom - ActualHeight; hidden = _monBounds.Bottom - 4; return true;
+            case "Left":
+                prop = LeftProperty; shown = wa.Left; hidden = wa.Left - (ActualWidth - 4); return true;
+            case "Right":
+                prop = LeftProperty; shown = wa.Right - ActualWidth; hidden = wa.Right - 4; return true;
+            default:
+                prop = null; shown = 0; hidden = 0; return false;
+        }
     }
 
     private void StartHideTimer()

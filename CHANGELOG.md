@@ -5,6 +5,16 @@ Formato: `[versión] — fecha`
 
 ---
 
+## [1.7.3] — 2026-10-16
+
+### 🐛 Bugs arreglados
+
+- **Auto-ocultar en Top, Bottom, Left y Right**: la barra se oculta dejando una línea de 4 px en el borde real del monitor donde está (Bottom ya no queda sobre la barra de tareas) y no interfiere con los menús de otros programas (p. ej. Photoshop). Con auto-ocultar activo la barra queda por encima de otras ventanas.
+- **Cambiar de posición en Configuración**: al guardar, la barra se recoloca correctamente sin necesidad de reiniciar el programa.
+- **Left y Right**: la barra ocupa toda la altura del monitor y muestra todas las categorías y los botones de acción.
+
+---
+
 ## [1.7.2] — 2026-10-16
 
 ### 🐛 Bugs arreglados
