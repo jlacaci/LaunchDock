@@ -21,6 +21,7 @@ public partial class SettingsWindow : Window
         InitializeComponent();
         _configManager = configManager;
         LoadCurrentConfig();
+        ApplyLanguageToUI();
         MouseLeftButtonDown += (s, e) => DragMove();
         Loaded += (s, e) =>
         {
@@ -62,6 +63,43 @@ public partial class SettingsWindow : Window
         OpacitySlider.Value      = cfg.Opacity;
         CornerRadiusSlider.Value = cfg.CornerRadiusValue;
         HighlightActiveTheme(cfg.ThemeName);
+
+        // Cargar combo de idiomas
+        LoadLanguageCombo(cfg.Language);
+    }
+
+    private void LoadLanguageCombo(string currentLang)
+    {
+        LanguageCombo.Items.Clear();
+        var langs = LanguageManager.GetAvailableLanguages();
+        int selectedIdx = 0;
+        string activeLang = string.IsNullOrEmpty(currentLang)
+            ? LanguageManager.DetectSystemLanguage() : currentLang;
+
+        for (int i = 0; i < langs.Count; i++)
+        {
+            var (code, name) = langs[i];
+            LanguageCombo.Items.Add(new ComboBoxItem { Content = name, Tag = code });
+            if (code == activeLang) selectedIdx = i;
+        }
+        if (LanguageCombo.Items.Count > 0)
+            LanguageCombo.SelectedIndex = selectedIdx;
+    }
+
+    private void LanguageCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (LanguageCombo.SelectedItem is not ComboBoxItem item) return;
+        string code = item.Tag?.ToString() ?? "es";
+        Cfg.Language = code;
+        LanguageManager.Apply(code);
+        ApplyLanguageToUI();
+    }
+
+    private void ApplyLanguageToUI()
+    {
+        // Los TextBlock con DynamicResource se actualizan solos.
+        // Solo actualizamos el Title de la ventana que no puede usar DynamicResource directamente.
+        Title = $"LaunchDock — {LanguageManager.Get("Settings.Title")}";
     }
 
     private void Save_Click(object sender, RoutedEventArgs e)
@@ -92,10 +130,10 @@ public partial class SettingsWindow : Window
     private void ClearCache_Click(object sender, RoutedEventArgs e)
     {
         int count = IconCacheHelper.CountCachedIcons();
-        if (count == 0) { CacheInfoText.Text = "La cache ya estaba vacia."; ClearCacheBtn.IsEnabled = false; return; }
+        if (count == 0) { CacheInfoText.Text = LanguageManager.Get("Settings.Cache.Empty"); ClearCacheBtn.IsEnabled = false; return; }
         IconCacheHelper.ClearAllCache();
-        CacheInfoText.Text = count + " iconos eliminados.";
-        ClearCacheBtn.Content = "Limpiado";
+        CacheInfoText.Text = LanguageManager.Get("Settings.Cache.Cleared", count);
+        ClearCacheBtn.Content = LanguageManager.Get("Settings.Cache.ClearedBtn");
         ClearCacheBtn.IsEnabled = false;
     }
 
@@ -116,11 +154,11 @@ public partial class SettingsWindow : Window
             string barFile = _configManager.BarId == "main" ? "config.json" : $"bar_{_configManager.BarId}.json";
             var src = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "LaunchDock", barFile);
             File.Copy(src, dlg.FileName, overwrite: true);
-            WpfMessageBox.Show("Configuracion exportada correctamente.", "Exportar", MessageBoxButton.OK, MessageBoxImage.Information);
+            WpfMessageBox.Show(LanguageManager.Get("Backup.Export.Success"), LanguageManager.Get("Backup.Export.Title"), MessageBoxButton.OK, MessageBoxImage.Information);
         }
         catch (Exception ex)
         {
-            WpfMessageBox.Show("Error al exportar: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            WpfMessageBox.Show(LanguageManager.Get("Backup.Export.Error", ex.Message), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -133,18 +171,18 @@ public partial class SettingsWindow : Window
             DereferenceLinks = false,
         };
         if (dlg.ShowDialog() != System.Windows.Forms.DialogResult.OK) return;
-        if (WpfMessageBox.Show("Se reemplazara la configuracion actual. Continuar?", "Importar",
+        if (WpfMessageBox.Show(LanguageManager.Get("Backup.Import.Confirm"), LanguageManager.Get("Backup.Import.Title"),
             MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes) return;
         try
         {
             var dest = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "LaunchDock", "config.json");
             File.Copy(dlg.FileName, dest, overwrite: true);
             _configManager.LoadInstance();
-            WpfMessageBox.Show("Configuracion importada. Reinicia LaunchDock para aplicar los cambios.", "Importar", MessageBoxButton.OK, MessageBoxImage.Information);
+            WpfMessageBox.Show(LanguageManager.Get("Backup.Import.Success"), LanguageManager.Get("Backup.Import.Title"), MessageBoxButton.OK, MessageBoxImage.Information);
         }
         catch (Exception ex)
         {
-            WpfMessageBox.Show("Error al importar: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            WpfMessageBox.Show(LanguageManager.Get("Backup.Import.Error", ex.Message), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -192,8 +230,8 @@ public partial class SettingsWindow : Window
     private void CloseBar_Click(object sender, RoutedEventArgs e)
     {
         var result = WpfMessageBox.Show(
-            "Si se cierra esta barra no se podrá recuperar su configuración ni la barra.\n\n¿Deseas continuar?",
-            "Cerrar barra",
+            LanguageManager.Get("Settings.CloseBar.Confirm"),
+            LanguageManager.Get("Settings.CloseBar.Title"),
             MessageBoxButton.OKCancel,
             MessageBoxImage.Warning);
 

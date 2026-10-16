@@ -5,7 +5,15 @@ Formato: `[versión] — fecha`
 
 ---
 
-## [1.7.0] — 2025-07
+## [1.7.1] — 2026-10-16
+
+### ✨ Mejoras
+
+- **Multiidioma completo**: la ventana de Configuración, el menú de bandeja y el resto de textos usan los recursos de `Language/*.xaml`. Nuevo selector de idioma en Configuración; el idioma elegido se guarda y se recuerda al reiniciar (`AppConfig.Language`). Si no hay idioma guardado se detecta el del sistema.
+
+---
+
+## [1.7.0] — 2026-10-16
 
 ### 🐛 Bugs arreglados
 

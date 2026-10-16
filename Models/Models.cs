@@ -8,7 +8,8 @@ namespace LaunchDock.Models;
 public class AppConfig
 {
     public string BarId { get; set; } = "main";           // "main" o GUID para barras secundarias
-    public string Position { get; set; } = "Bottom";       // Top, Bottom, Left, Right, Floating
+    public string Language { get; set; } = "";             // "" = detectar del sistema
+    public string Position { get; set; } = "Bottom";
     public bool AutoHide { get; set; } = false;
     public string Theme { get; set; } = "Dark";            // Dark, Light
     public string Orientation { get; set; } = "Horizontal"; // Horizontal, Vertical

@@ -161,7 +161,7 @@
             <!-- Title -->
             <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,24">
                 <TextBlock Text="⚙" FontSize="22" Foreground="#E94560" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                <TextBlock Text="Configuración" FontSize="20" FontWeight="Bold"
+                <TextBlock Text="{DynamicResource Settings.Title}" FontSize="20" FontWeight="Bold"
                            Foreground="#EAEAEA" FontFamily="Segoe UI Semibold" VerticalAlignment="Center"/>
                 <Button Content="✕" Width="28" Height="28" HorizontalAlignment="Right"
                         Style="{StaticResource IconButtonStyle}"
@@ -175,18 +175,18 @@
 
                     <!-- Position -->
                     <StackPanel Margin="0,0,0,16">
-                        <TextBlock Text="POSICIÓN DE LA BARRA" FontSize="10" FontWeight="Bold"
+                        <TextBlock Text="{DynamicResource Settings.Section.Position}" FontSize="10" FontWeight="Bold"
                                    Foreground="#9A9AB0" Margin="0,0,0,8"/>
                         <ComboBox x:Name="PositionCombo"
                                   Style="{StaticResource CustomComboBox}"
                                   Foreground="White"
                                   FontFamily="Segoe UI" FontSize="13" Height="36"
                                   ItemContainerStyle="{StaticResource CustomComboBoxItem}">
-                            <ComboBoxItem Content="Arriba (Top)" Tag="Top"/>
-                            <ComboBoxItem Content="Abajo (Bottom)" Tag="Bottom"/>
-                            <ComboBoxItem Content="Izquierda (Left)" Tag="Left"/>
-                            <ComboBoxItem Content="Derecha (Right)" Tag="Right"/>
-                            <ComboBoxItem Content="Flotante (mover libremente)" Tag="Floating"/>
+                            <ComboBoxItem Content="{DynamicResource Settings.Position.Top}" Tag="Top"/>
+                            <ComboBoxItem Content="{DynamicResource Settings.Position.Bottom}" Tag="Bottom"/>
+                            <ComboBoxItem Content="{DynamicResource Settings.Position.Left}" Tag="Left"/>
+                            <ComboBoxItem Content="{DynamicResource Settings.Position.Right}" Tag="Right"/>
+                            <ComboBoxItem Content="{DynamicResource Settings.Position.Floating}" Tag="Floating"/>
                         </ComboBox>
                     </StackPanel>
 
@@ -195,33 +195,33 @@
                         <CheckBox x:Name="AutoHideCheck"
                                   Foreground="#EAEAEA" FontFamily="Segoe UI" FontSize="13"
                                   VerticalAlignment="Center"/>
-                        <TextBlock Text="  Auto-ocultar (la barra se esconde al mover el ratón fuera)"
+                        <TextBlock Text="{DynamicResource Settings.AutoHide}"
                                    Foreground="#EAEAEA" FontFamily="Segoe UI" FontSize="13"
                                    VerticalAlignment="Center" TextWrapping="Wrap"/>
                     </StackPanel>
 
                     <!-- Orientation -->
                     <StackPanel Margin="0,0,0,16">
-                        <TextBlock Text="ORIENTACIÓN" FontSize="10" FontWeight="Bold"
+                        <TextBlock Text="{DynamicResource Settings.Section.Orientation}" FontSize="10" FontWeight="Bold"
                                    Foreground="#9A9AB0" Margin="0,0,0,8"/>
                         <StackPanel Orientation="Horizontal">
-                            <RadioButton x:Name="OrientationHorizontal" Content="Horizontal" GroupName="Orientation"
+                            <RadioButton x:Name="OrientationHorizontal" Content="{DynamicResource Settings.Orientation.Horizontal}" GroupName="Orientation"
                                          Foreground="#EAEAEA" FontFamily="Segoe UI" FontSize="13" Margin="0,0,16,0"/>
-                            <RadioButton x:Name="OrientationVertical" Content="Vertical" GroupName="Orientation"
+                            <RadioButton x:Name="OrientationVertical" Content="{DynamicResource Settings.Orientation.Vertical}" GroupName="Orientation"
                                          Foreground="#EAEAEA" FontFamily="Segoe UI" FontSize="13"/>
                         </StackPanel>
                     </StackPanel>
 
                     <!-- Icon size -->
                     <StackPanel Margin="0,0,0,16">
-                        <TextBlock Text="TAMAÑO DE ICONOS" FontSize="10" FontWeight="Bold"
+                        <TextBlock Text="{DynamicResource Settings.Section.IconSize}" FontSize="10" FontWeight="Bold"
                                    Foreground="#9A9AB0" Margin="0,0,0,8"/>
                         <StackPanel Orientation="Horizontal">
-                            <RadioButton x:Name="Size16" Content="16px (pequeño)" GroupName="IconSize"
+                            <RadioButton x:Name="Size16" Content="{DynamicResource Settings.IconSize.Small}" GroupName="IconSize"
                                          Foreground="#EAEAEA" FontFamily="Segoe UI" FontSize="13" Margin="0,0,16,0"/>
-                            <RadioButton x:Name="Size32" Content="32px (mediano)" GroupName="IconSize"
+                            <RadioButton x:Name="Size32" Content="{DynamicResource Settings.IconSize.Medium}" GroupName="IconSize"
                                          Foreground="#EAEAEA" FontFamily="Segoe UI" FontSize="13" Margin="0,0,16,0"/>
-                            <RadioButton x:Name="Size48" Content="48px (grande)" GroupName="IconSize"
+                            <RadioButton x:Name="Size48" Content="{DynamicResource Settings.IconSize.Large}" GroupName="IconSize"
                                          Foreground="#EAEAEA" FontFamily="Segoe UI" FontSize="13"/>
                         </StackPanel>
                     </StackPanel>
@@ -229,11 +229,11 @@
                     <!-- PERSONALIZACIÓN -->
                     <Border BorderBrush="#444466" BorderThickness="0,1,0,0" Margin="0,8,0,16"/>
 
-                    <TextBlock Text="🎨 PERSONALIZACIÓN" FontSize="12" FontWeight="Bold"
+                    <TextBlock Text="{DynamicResource Settings.Section.Customization}" FontSize="12" FontWeight="Bold"
                                Foreground="#E94560" Margin="0,0,0,16"/>
 
                     <!-- Temas -->
-                    <TextBlock Text="TEMA" FontSize="10" FontWeight="Bold"
+                    <TextBlock Text="{DynamicResource Settings.Section.Theme}" FontSize="10" FontWeight="Bold"
                                Foreground="#9A9AB0" Margin="0,0,0,8"/>
                     <WrapPanel Margin="0,0,0,16" x:Name="ThemePanel">
                         <Button x:Name="ThemeOscuro"   Content="🌑 Oscuro"           Tag="Oscuro"             Margin="0,0,6,6" Padding="10,6" Cursor="Hand" Click="ThemePreset_Click" FontFamily="Segoe UI" FontSize="12" BorderThickness="1" BorderBrush="#444466" Background="#2A2A4A" Foreground="#EAEAEA"/>
@@ -244,11 +244,11 @@
                     </WrapPanel>
 
                     <!-- Colores -->
-                    <TextBlock Text="COLORES" FontSize="10" FontWeight="Bold"
+                    <TextBlock Text="{DynamicResource Settings.Section.Colors}" FontSize="10" FontWeight="Bold"
                                Foreground="#9A9AB0" Margin="0,0,0,8"/>
 
                     <StackPanel Margin="0,0,0,12">
-                        <TextBlock Text="Color de fondo" Foreground="#EAEAEA" FontSize="11" Margin="0,0,0,4"/>
+                        <TextBlock Text="{DynamicResource Settings.Color.Background}" Foreground="#EAEAEA" FontSize="11" Margin="0,0,0,4"/>
                         <TextBox x:Name="BackgroundColorText"
                                  Background="#2A2A4A" Foreground="#EAEAEA"
                                  BorderBrush="#444466" BorderThickness="1"
@@ -257,7 +257,7 @@
                     </StackPanel>
 
                     <StackPanel Margin="0,0,0,12">
-                        <TextBlock Text="Color de acento" Foreground="#EAEAEA" FontSize="11" Margin="0,0,0,4"/>
+                        <TextBlock Text="{DynamicResource Settings.Color.Accent}" Foreground="#EAEAEA" FontSize="11" Margin="0,0,0,4"/>
                         <TextBox x:Name="AccentColorText"
                                  Background="#2A2A4A" Foreground="#EAEAEA"
                                  BorderBrush="#444466" BorderThickness="1"
@@ -266,7 +266,7 @@
                     </StackPanel>
 
                     <StackPanel Margin="0,0,0,16">
-                        <TextBlock Text="Color de texto" Foreground="#EAEAEA" FontSize="11" Margin="0,0,0,4"/>
+                        <TextBlock Text="{DynamicResource Settings.Color.Text}" Foreground="#EAEAEA" FontSize="11" Margin="0,0,0,4"/>
                         <TextBox x:Name="TextColorText"
                                  Background="#2A2A4A" Foreground="#EAEAEA"
                                  BorderBrush="#444466" BorderThickness="1"
@@ -275,7 +275,7 @@
                     </StackPanel>
 
                     <StackPanel Margin="0,0,0,16">
-                        <TextBlock Text="Color fondo menú desplegable" Foreground="#EAEAEA" FontSize="11" Margin="0,0,0,4"/>
+                        <TextBlock Text="{DynamicResource Settings.Color.Popup}" Foreground="#EAEAEA" FontSize="11" Margin="0,0,0,4"/>
                         <TextBox x:Name="PopupMenuColorText"
                                  Background="#2A2A4A" Foreground="#EAEAEA"
                                  BorderBrush="#444466" BorderThickness="1"
@@ -284,11 +284,11 @@
                     </StackPanel>
 
                     <!-- Fuente -->
-                    <TextBlock Text="FUENTE" FontSize="10" FontWeight="Bold"
+                    <TextBlock Text="{DynamicResource Settings.Section.Font}" FontSize="10" FontWeight="Bold"
                                Foreground="#9A9AB0" Margin="0,0,0,8"/>
 
                     <StackPanel Margin="0,0,0,12">
-                        <TextBlock Text="Familia de fuente" Foreground="#EAEAEA" FontSize="11" Margin="0,0,0,4"/>
+                        <TextBlock Text="{DynamicResource Settings.Font.Family}" Foreground="#EAEAEA" FontSize="11" Margin="0,0,0,4"/>
                         <ComboBox x:Name="FontFamilyCombo"
                                   Style="{StaticResource CustomComboBox}"
                                   Foreground="White"
@@ -305,7 +305,7 @@
                     </StackPanel>
 
                     <StackPanel Margin="0,0,0,16">
-                        <TextBlock Text="Tamaño de fuente" Foreground="#EAEAEA" FontSize="11" Margin="0,0,0,4"/>
+                        <TextBlock Text="{DynamicResource Settings.Font.Size}" Foreground="#EAEAEA" FontSize="11" Margin="0,0,0,4"/>
                         <StackPanel Orientation="Horizontal">
                             <Slider x:Name="FontSizeSlider" 
                                     Minimum="10" Maximum="20" Value="13" 
@@ -321,7 +321,7 @@
 
                     <!-- Radio de esquinas -->
                     <StackPanel Margin="0,0,0,16">
-                        <TextBlock Text="Radio de esquinas" Foreground="#EAEAEA" FontSize="11" Margin="0,0,0,4"/>
+                        <TextBlock Text="{DynamicResource Settings.Font.CornerRadius}" Foreground="#EAEAEA" FontSize="11" Margin="0,0,0,4"/>
                         <StackPanel Orientation="Horizontal">
                             <Slider x:Name="CornerRadiusSlider"
                                     Minimum="0" Maximum="20" Value="12"
@@ -336,11 +336,11 @@
                     </StackPanel>
 
                     <!-- Transparencia -->
-                    <TextBlock Text="TRANSPARENCIA" FontSize="10" FontWeight="Bold"
+                    <TextBlock Text="{DynamicResource Settings.Section.Transparency}" FontSize="10" FontWeight="Bold"
                                Foreground="#9A9AB0" Margin="0,0,0,8"/>
 
                     <StackPanel Margin="0,0,0,16">
-                        <TextBlock Text="Opacidad" Foreground="#EAEAEA" FontSize="11" Margin="0,0,0,4"/>
+                        <TextBlock Text="{DynamicResource Settings.Opacity}" Foreground="#EAEAEA" FontSize="11" Margin="0,0,0,4"/>
                         <StackPanel Orientation="Horizontal">
                             <Slider x:Name="OpacitySlider" 
                                     Minimum="0" Maximum="100" Value="95" 
@@ -352,6 +352,19 @@
                             <TextBlock Text="%" Foreground="#9A9AB0" FontSize="11" 
                                        Margin="2,0,0,0" VerticalAlignment="Center"/>
                         </StackPanel>
+                    </StackPanel>
+
+                    <!-- Idioma -->
+                    <Border BorderBrush="#444466" BorderThickness="0,1,0,0" Margin="0,8,0,16"/>
+                    <TextBlock Text="{DynamicResource Settings.Section.Language}" FontSize="10" FontWeight="Bold"
+                               Foreground="#9A9AB0" Margin="0,0,0,8"/>
+                    <StackPanel Margin="0,0,0,16">
+                        <ComboBox x:Name="LanguageCombo"
+                                  Style="{StaticResource CustomComboBox}"
+                                  Foreground="White"
+                                  FontFamily="Segoe UI" FontSize="13" Height="36"
+                                  ItemContainerStyle="{StaticResource CustomComboBoxItem}"
+                                  SelectionChanged="LanguageCombo_SelectionChanged"/>
                     </StackPanel>
 
                 </StackPanel>
@@ -369,17 +382,17 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                            <TextBlock Text="💾 Copia de seguridad" Foreground="#EAEAEA"
+                            <TextBlock Text="{DynamicResource Settings.Backup.Title}" Foreground="#EAEAEA"
                                        FontFamily="Segoe UI Semibold" FontSize="12" FontWeight="SemiBold"/>
-                            <TextBlock Text="Exporta o importa tu configuración completa"
+                            <TextBlock Text="{DynamicResource Settings.Backup.Subtitle}"
                                        Foreground="#9A9AB0" FontFamily="Segoe UI" FontSize="11"/>
                         </StackPanel>
-                        <Button Grid.Column="1" Content="📤 Exportar" Click="ExportConfig_Click"
+                        <Button Grid.Column="1" Content="{DynamicResource Settings.Backup.Export}" Click="ExportConfig_Click"
                                 Background="#2A2A4A" Foreground="#9A9AB0"
                                 BorderThickness="1" BorderBrush="#444466"
                                 Padding="12,6" FontFamily="Segoe UI" FontSize="12"
                                 Cursor="Hand" Margin="12,0,6,0" VerticalAlignment="Center"/>
-                        <Button Grid.Column="2" Content="📥 Importar" Click="ImportConfig_Click"
+                        <Button Grid.Column="2" Content="{DynamicResource Settings.Backup.Import}" Click="ImportConfig_Click"
                                 Background="#2A2A4A" Foreground="#9A9AB0"
                                 BorderThickness="1" BorderBrush="#444466"
                                 Padding="12,6" FontFamily="Segoe UI" FontSize="12"
@@ -396,15 +409,15 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                            <TextBlock Text="🖼 Caché de iconos" Foreground="#EAEAEA"
+                            <TextBlock Text="{DynamicResource Settings.Cache.Title}" Foreground="#EAEAEA"
                                        FontFamily="Segoe UI Semibold" FontSize="12" FontWeight="SemiBold"/>
                             <TextBlock x:Name="CacheInfoText"
-                                       Text="Regenera iconos si alguno se ve con fondo negro o incorrecto"
+                                       Text="{DynamicResource Settings.Cache.Subtitle}"
                                        Foreground="#9A9AB0" FontFamily="Segoe UI" FontSize="11"
                                        TextWrapping="Wrap"/>
                         </StackPanel>
                         <Button Grid.Column="1" x:Name="ClearCacheBtn"
-                                Content="🗑 Limpiar" Click="ClearCache_Click"
+                                Content="{DynamicResource Settings.Cache.Clear}" Click="ClearCache_Click"
                                 Background="#2A2A4A" Foreground="#9A9AB0"
                                 BorderThickness="1" BorderBrush="#444466"
                                 Padding="12,6" FontFamily="Segoe UI" FontSize="12"
@@ -416,7 +429,7 @@
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
                         <!-- Botón cerrar barra: solo visible en barras secundarias (se controla desde code-behind) -->
                         <Button x:Name="CloseBarBtn"
-                                Content="🗑 Cerrar esta barra"
+                                Content="{DynamicResource Settings.CloseBar}"
                                 Click="CloseBar_Click"
                                 Visibility="Collapsed"
                                 Background="#7B1E1E" Foreground="#FF8080"
@@ -429,12 +442,12 @@
                                    Margin="4,0,0,0"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Button Content="Cancelar" Click="Cancel_Click"
+                        <Button Content="{DynamicResource Settings.Cancel}" Click="Cancel_Click"
                                 Background="#2A2A4A" Foreground="#9A9AB0"
                                 BorderThickness="1" BorderBrush="#444466"
                                 Padding="16,8" FontFamily="Segoe UI" FontSize="13" Cursor="Hand"
                                 Width="100" Margin="0,0,12,0"/>
-                        <Button Content="Guardar" Click="Save_Click"
+                        <Button Content="{DynamicResource Settings.Save}" Click="Save_Click"
                                 Background="#E94560" Foreground="White"
                                 BorderThickness="0"
                                 Padding="16,8" FontFamily="Segoe UI Semibold" FontSize="13"

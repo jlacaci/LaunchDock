@@ -17,6 +17,12 @@ public partial class App : System.Windows.Application
         ConfigManager.Load();
         BarManager.Load();
 
+        // Aplicar idioma: usar el guardado en config, o detectar del sistema
+        string lang = ConfigManager.Config.Language;
+        if (string.IsNullOrEmpty(lang))
+            lang = LanguageManager.DetectSystemLanguage();
+        LanguageManager.Apply(lang);
+
         _mainWindow = new MainBarWindow();
         _mainWindow.Show();
 
@@ -58,10 +64,10 @@ public partial class App : System.Windows.Application
         };
 
         var menu = new WinForms.ContextMenuStrip();
-        menu.Items.Add("⚙ Configuración", null, (s, e) => _mainWindow?.OpenSettings());
-        menu.Items.Add("✏ Modo Edición", null, (s, e) => _mainWindow?.ToggleEditMode());
+        menu.Items.Add(LanguageManager.Get("Tray.Settings"), null, (s, e) => _mainWindow?.OpenSettings());
+        menu.Items.Add(LanguageManager.Get("Tray.EditMode"), null, (s, e) => _mainWindow?.ToggleEditMode());
         menu.Items.Add(new WinForms.ToolStripSeparator());
-        menu.Items.Add("✕ Cerrar LaunchDock", null, (s, e) => ExitApp());
+        menu.Items.Add(LanguageManager.Get("Tray.Exit"), null, (s, e) => ExitApp());
 
         _trayIcon.ContextMenuStrip = menu;
         _trayIcon.DoubleClick += (s, e) => _mainWindow?.ToggleEditMode();
